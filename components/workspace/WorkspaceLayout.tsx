@@ -2,6 +2,7 @@
 
 import PageCanvas from './PageCanvas'
 import PageNavigator from './PageNavigator'
+import Toolbar from './Toolbar'
 
 export default function WorkspaceLayout() {
   return (
@@ -21,6 +22,7 @@ export default function WorkspaceLayout() {
       <div className="flex-1 flex overflow-hidden">
         {/* Canvas area */}
         <div className="flex-1 flex flex-col overflow-hidden">
+          <Toolbar />
           <PageCanvas />
           <PageNavigator />
         </div>
