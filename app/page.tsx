@@ -3,7 +3,6 @@ import Navbar from '@/components/landing/Navbar'
 import Hero from '@/components/landing/Hero'
 import HowItWorks from '@/components/landing/HowItWorks'
 import InteractiveDemo from '@/components/landing/InteractiveDemo'
-import FeedbackSection from '@/components/landing/FeedbackSection'
 import Footer from '@/components/landing/Footer'
 
 export default function LandingPage() {
@@ -14,7 +13,6 @@ export default function LandingPage() {
       <Hero />
       <HowItWorks />
       <InteractiveDemo />
-      <FeedbackSection />
       <Footer />
     </div>
   )

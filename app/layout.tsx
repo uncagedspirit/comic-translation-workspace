@@ -13,10 +13,10 @@ const bangers = Bangers({
 export const metadata: Metadata = {
   title: 'MangaFlow — Comic Translation Workspace',
   description:
-    'Draw speech bubbles on your manga pages, type translations, export a finished chapter. No Photoshop needed.',
+    'Draw speech bubbles on your manga, manhua, manhwa, or comic pages, type translations, and export a finished chapter. No Photoshop needed.',
   openGraph: {
-    title: 'MangaFlow — Translate Manga Faster',
-    description: 'Purpose-built manga translation tool. Open beta.',
+    title: 'MangaFlow — Translate Comics Faster',
+    description: 'Purpose-built comic translation tool for manga, manhua, manhwa & more. Open beta.',
     type: 'website',
   },
 }

@@ -16,7 +16,6 @@ export default function AuthButton({ variant = 'nav' }: AuthButtonProps) {
     setMounted(true)
   }, [])
 
-  // Always render the same thing on server and first client render
   if (!mounted || status === 'loading') {
     if (variant === 'hero') return null
     return <div className="h-9 w-20 bg-white/5 rounded" />
@@ -31,7 +30,7 @@ export default function AuthButton({ variant = 'nav' }: AuthButtonProps) {
             alt={session.user.name ?? 'User'}
             width={32}
             height={32}
-            className="rounded-full border-2 border-[#e11d1d]"
+            className="rounded-full border-2 border-[#C84B31]"
           />
         )}
         <span className="text-sm text-gray-300 hidden md:block">
@@ -44,18 +43,6 @@ export default function AuthButton({ variant = 'nav' }: AuthButtonProps) {
           Sign out
         </button>
       </div>
-    )
-  }
-
-  if (variant === 'hero') {
-    return (
-      <button
-        onClick={() => signIn('google')}
-        className="group flex items-center gap-3 bg-white text-gray-900 font-bold px-8 py-4 text-base hover:bg-gray-100 transition-all duration-150 border-2 border-transparent hover:border-white"
-      >
-        <GoogleIcon />
-        Sign in with Google
-      </button>
     )
   }
 

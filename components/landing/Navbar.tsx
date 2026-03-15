@@ -13,7 +13,10 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 bg-[#e11d1d] flex items-center justify-center border-2 border-white group-hover:rotate-6 transition-transform duration-150">
+          <div
+            className="w-8 h-8 flex items-center justify-center border-2 border-white group-hover:rotate-6 transition-transform duration-150"
+            style={{ background: '#C84B31' }}
+          >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
               <rect x="1" y="1" width="6" height="6" />
               <rect x="9" y="1" width="6" height="6" />
@@ -36,12 +39,9 @@ export default function Navbar() {
           <a href="#demo" className="hover:text-white transition-colors">
             Demo
           </a>
-          <a href="#feedback" className="hover:text-white transition-colors">
-            Feedback
-          </a>
         </div>
 
-        {/* Auth area — wrapped in ClientOnly so server and client render identically */}
+        {/* Auth area */}
         <div className="flex items-center gap-4">
           <ClientOnly>
             {session && (
@@ -53,7 +53,8 @@ export default function Navbar() {
                     .getElementById('uploader-section')
                     ?.scrollIntoView({ behavior: 'smooth' })
                 }}
-                className="hidden md:block text-sm font-bold text-[#e11d1d] hover:text-red-400 transition-colors"
+                className="hidden md:block text-sm font-bold hover:opacity-75 transition-opacity"
+                style={{ color: '#C84B31' }}
               >
                 My Workspace ↗
               </Link>

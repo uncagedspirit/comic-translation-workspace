@@ -8,19 +8,19 @@ export default function BetaBanner() {
   if (dismissed) return null
 
   return (
-    <div className="relative z-50 bg-[#e11d1d] text-white">
+    <div className="relative z-50 text-white" style={{ background: '#C84B31' }}>
       <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 flex-1 justify-center">
-          <span className="text-xs font-black tracking-[0.25em] uppercase bg-white text-[#e11d1d] px-2 py-0.5">
+          <span className="text-xs font-black tracking-[0.25em] uppercase bg-white px-2 py-0.5" style={{ color: '#C84B31' }}>
             BETA
           </span>
           <p className="text-sm font-medium">
-            MangaFlow is in open beta — features are being added weekly.{' '}
+            MangaFlow is in open beta — manga, manhua, manhwa & comics supported.{' '}
             <a
-              href="#feedback"
+              href="#demo"
               className="underline underline-offset-2 font-bold hover:no-underline"
             >
-              Share your feedback ↓
+              Try it free ↓
             </a>
           </p>
         </div>
