@@ -52,7 +52,7 @@ export default function HowItWorks() {
         {steps.map((step, i) => (
           <div
             key={step.number}
-            className="border-r-0 md:border-r-[3px] border-b-[3px] md:border-b-0 border-white last:border-r-0 p-8 flex flex-col gap-4 hover:bg-white/[0.03] transition-colors group"
+            className="border-r-0 md:border-r-[3px] border-b-[3px] md:border-b-0 border-white last:border-r-0 p-8 flex flex-col gap-4 hover:bg-white/3 transition-colors group"
           >
             {/* Step number */}
             <div className="flex items-start justify-between">
@@ -84,7 +84,7 @@ export default function HowItWorks() {
 
             {/* Connector arrow */}
             {i < steps.length - 1 && (
-              <div className="hidden lg:block absolute right-[-1.5rem] top-1/2 text-gray-600 text-2xl pointer-events-none z-10">
+              <div className="hidden lg:block absolute -right-6 top-1/2 text-gray-600 text-2xl pointer-events-none z-10">
                 ▶
               </div>
             )}

@@ -38,7 +38,8 @@ export default function Hero() {
         }}
       />
       {/* Red vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(225,29,29,0.12)_0%,_transparent_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(225,29,29,0.12)_0%,transparent_70%)]" 
+      />
 
       {/* Floating impact words */}
       <div className="absolute top-16 left-8 text-[#e11d1d] opacity-20 select-none pointer-events-none"
