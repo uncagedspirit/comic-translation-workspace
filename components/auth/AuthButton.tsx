@@ -2,6 +2,7 @@
 
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
 interface AuthButtonProps {
   variant?: 'hero' | 'nav'
@@ -9,11 +10,16 @@ interface AuthButtonProps {
 
 export default function AuthButton({ variant = 'nav' }: AuthButtonProps) {
   const { data: session, status } = useSession()
+  const [mounted, setMounted] = useState(false)
 
-  if (status === 'loading') {
-    return (
-      <div className="h-9 w-32 bg-white/5 rounded animate-pulse" />
-    )
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Always render the same thing on server and first client render
+  if (!mounted || status === 'loading') {
+    if (variant === 'hero') return null
+    return <div className="h-9 w-20 bg-white/5 rounded" />
   }
 
   if (session?.user) {

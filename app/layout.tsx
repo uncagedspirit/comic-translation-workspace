@@ -27,8 +27,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${inter.variable} ${bangers.variable} font-sans bg-[#0a0a0a] text-gray-100 min-h-screen`}
       >
         <SessionProvider>{children}</SessionProvider>

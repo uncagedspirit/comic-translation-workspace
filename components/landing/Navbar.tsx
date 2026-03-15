@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import AuthButton from '@/components/auth/AuthButton'
+import ClientOnly from '@/components/providers/ClientOnly'
 
 export default function Navbar() {
   const { data: session } = useSession()
@@ -40,23 +41,24 @@ export default function Navbar() {
           </a>
         </div>
 
-        {/* Auth area */}
+        {/* Auth area — wrapped in ClientOnly so server and client render identically */}
         <div className="flex items-center gap-4">
-          {session && (
-            <Link
-              href={`/workspace`}
-              onClick={(e) => {
-                // workspace requires a projectId — link to root instead
-                e.preventDefault()
-                document
-                  .getElementById('uploader-section')
-                  ?.scrollIntoView({ behavior: 'smooth' })
-              }}
-              className="hidden md:block text-sm font-bold text-[#e11d1d] hover:text-red-400 transition-colors"
-            >
-              My Workspace ↗
-            </Link>
-          )}
+          <ClientOnly>
+            {session && (
+              <Link
+                href="/"
+                onClick={(e) => {
+                  e.preventDefault()
+                  document
+                    .getElementById('uploader-section')
+                    ?.scrollIntoView({ behavior: 'smooth' })
+                }}
+                className="hidden md:block text-sm font-bold text-[#e11d1d] hover:text-red-400 transition-colors"
+              >
+                My Workspace ↗
+              </Link>
+            )}
+          </ClientOnly>
           <AuthButton variant="nav" />
         </div>
       </div>
