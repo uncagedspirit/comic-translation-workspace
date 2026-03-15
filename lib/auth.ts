@@ -1,5 +1,6 @@
 import { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
+import { saveUser } from '@/lib/appwrite-server'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -10,17 +11,18 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user }) {
+      if (!user.email) return false
+
       try {
-        const { saveUser } = await import('./appwrite-server')
         await saveUser({
           name: user.name ?? '',
-          email: user.email ?? '',
+          email: user.email,
           image: user.image ?? '',
         })
       } catch (err) {
-        // Don't block sign in on Appwrite errors — log and continue
-        console.error('[Auth] Failed to persist user to Appwrite:', err)
+        console.error('[Auth] Failed to save user to Appwrite:', err)
       }
+
       return true
     },
     async session({ session }) {

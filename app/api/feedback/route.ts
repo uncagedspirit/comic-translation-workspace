@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { saveFeedback } from '@/lib/appwrite-server'
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,36 +18,12 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Only attempt Appwrite save if all required env vars are present
-    const appwriteConfigured =
-      process.env.APPWRITE_PROJECT_ID &&
-      process.env.APPWRITE_API_KEY &&
-      process.env.APPWRITE_DATABASE_ID &&
-      process.env.APPWRITE_FEEDBACK_COLLECTION_ID
-
-    if (appwriteConfigured) {
-      try {
-        const { saveFeedback } = await import('@/lib/appwrite-server')
-        await saveFeedback({
-          name: name?.trim() ?? '',
-          email: email.trim(),
-          message: message.trim(),
-          rating: rating ?? 5,
-        })
-      } catch (appwriteErr) {
-        // Log but don't fail the request — feedback is received even if storage fails
-        console.error('[Feedback API] Appwrite save failed:', appwriteErr)
-      }
-    } else {
-      // Log feedback to console as fallback when Appwrite is not configured
-      console.log('[Feedback received]', {
-        name: name?.trim() ?? '',
-        email: email.trim(),
-        message: message.trim(),
-        rating: rating ?? 5,
-        timestamp: new Date().toISOString(),
-      })
-    }
+    await saveFeedback({
+      name: name?.trim() ?? '',
+      email: email.trim(),
+      message: message.trim(),
+      rating: rating ?? 5,
+    })
 
     return NextResponse.json({ success: true })
   } catch (err) {
