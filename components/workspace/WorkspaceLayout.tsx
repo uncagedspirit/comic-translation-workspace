@@ -1,5 +1,6 @@
 'use client'
 
+import TranslationPanel from '../panel/TranslationPanel'
 import PageCanvas from './PageCanvas'
 import PageNavigator from './PageNavigator'
 import Toolbar from './Toolbar'
@@ -27,9 +28,9 @@ export default function WorkspaceLayout() {
           <PageNavigator />
         </div>
 
-        {/* Translation panel placeholder */}
-        <div className="w-80 bg-gray-900 border-l border-gray-800 flex items-center justify-center shrink-0">
-          <p className="text-gray-600 text-sm">Translation panel coming soon</p>
+        {/* Translation panel */}
+        <div className="w-80 bg-gray-900 border-l border-gray-800 flex flex-col shrink-0">
+          <TranslationPanel />
         </div>
       </div>
     </div>

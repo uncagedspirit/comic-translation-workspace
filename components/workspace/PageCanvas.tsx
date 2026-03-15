@@ -5,6 +5,7 @@ import { Stage, Layer, Image as KonvaImage, Rect } from 'react-konva'
 import Konva from 'konva'
 import { useProjectStore } from '@/lib/store'
 import BubbleRect from './BubbleRect'
+import TextOverlay from './TextOverlay'
 
 export default function PageCanvas() {
   const currentPage = useProjectStore((s) => s.getCurrentPage())
@@ -161,6 +162,9 @@ export default function PageCanvas() {
           <Layer>
             {bubbles.map((bubble) => (
               <BubbleRect key={bubble.id} bubble={bubble} scale={scale} />
+            ))}
+            {bubbles.map((bubble) => (
+              <TextOverlay key={`text-${bubble.id}`} bubble={bubble} scale={scale} />
             ))}
             {isDrawing && drawRect && (
               <Rect
