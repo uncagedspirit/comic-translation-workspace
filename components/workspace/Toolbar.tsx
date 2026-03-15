@@ -34,7 +34,7 @@ export default function Toolbar({ zoomIndex, onZoomIn, onZoomOut }: ToolbarProps
             : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'}
         `}
       >
-        ↖ Select
+        ↖ Select Bubble
       </button>
       <button
         onClick={() => setActiveTool('draw')}

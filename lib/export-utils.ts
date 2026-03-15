@@ -32,24 +32,12 @@ async function renderPageToPng(
       const konvaImage = new Konva.Image({ image: img, width, height })
       layer.add(konvaImage)
 
-      // Text overlays
       for (const bubble of page.bubbles) {
         if (!bubble.translation.trim()) continue
 
-        const { fontSize, lines } = fitText(
-          bubble.translation,
-          bubble.width,
-          bubble.height,
-          28,
-          8,
-          'Bangers'
-        )
+        const padding = 8
 
-        const lineHeight = fontSize * 1.4
-        const totalTextHeight = lines.length * lineHeight
-        const startY = bubble.y + (bubble.height - totalTextHeight) / 2
-
-        // White background shape to cover original text
+        // White background — same shape as the bubble
         if (bubble.shape === 'ellipse') {
           const bgEllipse = new Konva.Ellipse({
             x: bubble.x + bubble.width / 2,
@@ -71,19 +59,31 @@ async function renderPageToPng(
           layer.add(bgRect)
         }
 
-        lines.forEach((line, i) => {
-          const text = new Konva.Text({
-            text: line,
-            x: bubble.x,
-            y: startY + i * lineHeight,
-            width: bubble.width,
-            fontSize,
-            fontFamily: 'Bangers',
-            fill: 'black',
-            align: 'center',
-          })
-          layer.add(text)
+        // Get font size from fitText, then let Konva handle layout —
+        // identical to how TextOverlay works in the preview
+        const { fontSize } = fitText(
+          bubble.translation,
+          bubble.width,
+          bubble.height,
+          28,
+          8,
+          'Bangers'
+        )
+
+        const text = new Konva.Text({
+          text: bubble.translation,
+          x: bubble.x + padding,
+          y: bubble.y + padding,
+          width: bubble.width - padding * 2,
+          height: bubble.height - padding * 2,
+          fontSize,
+          fontFamily: 'Bangers',
+          fill: 'black',
+          align: 'center',
+          verticalAlign: 'middle',
+          wrap: 'word',
         })
+        layer.add(text)
       }
 
       layer.draw()

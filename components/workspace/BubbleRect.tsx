@@ -35,8 +35,10 @@ export default function BubbleRect({ bubble, scale }: BubbleRectProps) {
 
   const handleClick = () => setSelectedBubble(bubble.id)
 
+  const hasTranslation = bubble.translation.trim().length > 0
+
   const sharedProps = {
-    fill: isSelected ? 'rgba(99, 102, 241, 0.2)' : 'rgba(99, 102, 241, 0.1)',
+    fill: hasTranslation ? 'transparent' : 'rgba(99, 102, 241, 0.08)',
     stroke: isSelected ? '#818cf8' : '#6366f1',
     strokeWidth: isSelected ? 2 : 1.5,
     draggable: true,
@@ -44,7 +46,6 @@ export default function BubbleRect({ bubble, scale }: BubbleRectProps) {
     onTap: handleClick,
   }
 
-  // Ellipse center coords
   const cx = (bubble.x + bubble.width / 2) * scale
   const cy = (bubble.y + bubble.height / 2) * scale
   const rx = (bubble.width / 2) * scale
