@@ -3,10 +3,6 @@ import JSZip from 'jszip'
 import { Project } from './types'
 import { fitText } from './text-fit'
 
-/**
- * Renders a single page (image + text overlays) to a PNG data URL
- * using an offscreen Konva stage — no DOM mounting needed.
- */
 async function renderPageToPng(
   project: Project,
   pageIndex: number
@@ -22,31 +18,21 @@ async function renderPageToPng(
       const width = img.naturalWidth
       const height = img.naturalHeight
 
-      // Create an offscreen container div (not mounted to DOM visually)
       const container = document.createElement('div')
       container.style.position = 'absolute'
       container.style.top = '-9999px'
       container.style.left = '-9999px'
       document.body.appendChild(container)
 
-      const stage = new Konva.Stage({
-        container,
-        width,
-        height,
-      })
-
+      const stage = new Konva.Stage({ container, width, height })
       const layer = new Konva.Layer()
       stage.add(layer)
 
-      // Draw the base image
-      const konvaImage = new Konva.Image({
-        image: img,
-        width,
-        height,
-      })
+      // Base image
+      const konvaImage = new Konva.Image({ image: img, width, height })
       layer.add(konvaImage)
 
-      // Draw text overlays for each bubble
+      // Text overlays
       for (const bubble of page.bubbles) {
         if (!bubble.translation.trim()) continue
 
@@ -63,16 +49,27 @@ async function renderPageToPng(
         const totalTextHeight = lines.length * lineHeight
         const startY = bubble.y + (bubble.height - totalTextHeight) / 2
 
-        // White background box behind text for readability
-        const bgRect = new Konva.Rect({
-          x: bubble.x + 4,
-          y: bubble.y + 4,
-          width: bubble.width - 8,
-          height: bubble.height - 8,
-          fill: 'white',
-          cornerRadius: 4,
-        })
-        layer.add(bgRect)
+        // White background shape to cover original text
+        if (bubble.shape === 'ellipse') {
+          const bgEllipse = new Konva.Ellipse({
+            x: bubble.x + bubble.width / 2,
+            y: bubble.y + bubble.height / 2,
+            radiusX: bubble.width / 2 - 4,
+            radiusY: bubble.height / 2 - 4,
+            fill: 'white',
+          })
+          layer.add(bgEllipse)
+        } else {
+          const bgRect = new Konva.Rect({
+            x: bubble.x + 4,
+            y: bubble.y + 4,
+            width: bubble.width - 8,
+            height: bubble.height - 8,
+            fill: 'white',
+            cornerRadius: 4,
+          })
+          layer.add(bgRect)
+        }
 
         lines.forEach((line, i) => {
           const text = new Konva.Text({
@@ -107,16 +104,11 @@ async function renderPageToPng(
   })
 }
 
-/**
- * Exports all pages of a project as a ZIP of PNG files.
- * Triggers a browser download automatically.
- */
 export async function exportChapter(project: Project): Promise<void> {
   const zip = new JSZip()
 
   for (let i = 0; i < project.pages.length; i++) {
     const dataUrl = await renderPageToPng(project, i)
-    // Strip the data:image/png;base64, prefix
     const base64 = dataUrl.split(',')[1]
     const pageNum = String(i + 1).padStart(2, '0')
     zip.file(`page-${pageNum}.png`, base64, { base64: true })

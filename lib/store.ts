@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { Project, Page, Bubble, ActiveTool } from './types'
+import { Project, Page, Bubble, ActiveTool, BubbleShape } from './types'
 
 interface ProjectStore {
   // State
@@ -9,6 +9,7 @@ interface ProjectStore {
   currentPageIndex: number
   selectedBubbleId: string | null
   activeTool: ActiveTool
+  activeBubbleShape: BubbleShape
 
   // Project actions
   createProject: (name: string, imageUrls: string[]) => string
@@ -19,7 +20,7 @@ interface ProjectStore {
   setCurrentPage: (index: number) => void
 
   // Bubble actions
-  addBubble: (pageIndex: number, x: number, y: number, width: number, height: number) => string
+  addBubble: (pageIndex: number, x: number, y: number, width: number, height: number, shape: BubbleShape) => string
   updateBubble: (bubbleId: string, updates: Partial<Bubble>) => void
   deleteBubble: (bubbleId: string) => void
 
@@ -29,6 +30,7 @@ interface ProjectStore {
   // UI actions
   setSelectedBubble: (id: string | null) => void
   setActiveTool: (tool: ActiveTool) => void
+  setActiveBubbleShape: (shape: BubbleShape) => void
 
   // Selectors
   getCurrentProject: () => Project | null
@@ -46,6 +48,7 @@ export const useProjectStore = create<ProjectStore>()(
       currentPageIndex: 0,
       selectedBubbleId: null,
       activeTool: 'select',
+      activeBubbleShape: 'rect',
 
       // Project actions
       createProject: (name, imageUrls) => {
@@ -91,7 +94,7 @@ export const useProjectStore = create<ProjectStore>()(
       },
 
       // Bubble actions
-      addBubble: (pageIndex, x, y, width, height) => {
+      addBubble: (pageIndex, x, y, width, height, shape) => {
         const bubbleId = crypto.randomUUID()
         const bubble: Bubble = {
           id: bubbleId,
@@ -101,6 +104,7 @@ export const useProjectStore = create<ProjectStore>()(
           width,
           height,
           translation: '',
+          shape,
         }
         set((state) => {
           const project = state.projects[state.currentProjectId!]
@@ -166,6 +170,7 @@ export const useProjectStore = create<ProjectStore>()(
       // UI actions
       setSelectedBubble: (id) => set({ selectedBubbleId: id }),
       setActiveTool: (tool) => set({ activeTool: tool }),
+      setActiveBubbleShape: (shape) => set({ activeBubbleShape: shape }),
 
       // Selectors
       getCurrentProject: () => {
@@ -197,8 +202,6 @@ export const useProjectStore = create<ProjectStore>()(
     {
       name: 'comic-workspace-storage',
       partialize: (state) => ({
-        // Persist project metadata and bubbles, but NOT imageUrls
-        // Object URLs don't survive page reloads
         projects: Object.fromEntries(
           Object.entries(state.projects).map(([id, project]) => [
             id,
@@ -206,7 +209,7 @@ export const useProjectStore = create<ProjectStore>()(
               ...project,
               pages: project.pages.map((page) => ({
                 ...page,
-                imageUrl: '', // cleared on reload — user re-uploads
+                imageUrl: '',
               })),
             },
           ])

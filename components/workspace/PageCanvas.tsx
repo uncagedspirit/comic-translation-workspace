@@ -19,6 +19,7 @@ export default function PageCanvas({ zoom }: PageCanvasProps) {
   const currentPageIndex = useProjectStore((s) => s.currentPageIndex)
   const bubbles = useProjectStore((s) => s.getCurrentPageBubbles())
   const activeTool = useProjectStore((s) => s.activeTool)
+  const activeBubbleShape = useProjectStore((s) => s.activeBubbleShape)
   const selectedBubbleId = useProjectStore((s) => s.selectedBubbleId)
   const setSelectedBubble = useProjectStore((s) => s.setSelectedBubble)
   const setActiveTool = useProjectStore((s) => s.setActiveTool)
@@ -29,14 +30,12 @@ export default function PageCanvas({ zoom }: PageCanvasProps) {
   const [image, setImage] = useState<HTMLImageElement | null>(null)
   const [imageSize, setImageSize] = useState({ width: 800, height: 600 })
 
-  // Drawing state
   const [isDrawing, setIsDrawing] = useState(false)
   const [drawStart, setDrawStart] = useState({ x: 0, y: 0 })
   const [drawRect, setDrawRect] = useState<{
     x: number; y: number; width: number; height: number
   } | null>(null)
 
-  // Load image when page changes
   useEffect(() => {
     if (!currentPage?.imageUrl) { setImage(null); return }
     const img = new window.Image()
@@ -47,7 +46,6 @@ export default function PageCanvas({ zoom }: PageCanvasProps) {
     }
   }, [currentPage?.imageUrl])
 
-  // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.key === 'Delete' || e.key === 'Backspace') && selectedBubbleId) {
@@ -99,7 +97,8 @@ export default function PageCanvas({ zoom }: PageCanvasProps) {
         drawRect.x / zoom,
         drawRect.y / zoom,
         drawRect.width / zoom,
-        drawRect.height / zoom
+        drawRect.height / zoom,
+        activeBubbleShape
       )
       setSelectedBubble(id)
     }
@@ -119,12 +118,10 @@ export default function PageCanvas({ zoom }: PageCanvasProps) {
   }
 
   return (
-    // Scrollable container
     <div
       className="flex-1 overflow-auto bg-gray-950"
       style={{ cursor: activeTool === 'draw' ? 'crosshair' : 'default' }}
     >
-      {/* Inner wrapper centers the stage when smaller than container */}
       <div
         className="min-h-full flex items-start justify-center p-6"
         style={{ minWidth: stageWidth + 48 }}

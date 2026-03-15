@@ -1,3 +1,5 @@
+export type BubbleShape = 'rect' | 'ellipse'
+
 export interface Bubble {
   id: string
   pageIndex: number
@@ -6,6 +8,7 @@ export interface Bubble {
   width: number
   height: number
   translation: string
+  shape: BubbleShape
 }
 
 export interface Page {

@@ -12,6 +12,8 @@ interface ToolbarProps {
 export default function Toolbar({ zoomIndex, onZoomIn, onZoomOut }: ToolbarProps) {
   const activeTool = useProjectStore((s) => s.activeTool)
   const setActiveTool = useProjectStore((s) => s.setActiveTool)
+  const activeBubbleShape = useProjectStore((s) => s.activeBubbleShape)
+  const setActiveBubbleShape = useProjectStore((s) => s.setActiveBubbleShape)
 
   const zoomPercent = Math.round(ZOOM_STEPS[zoomIndex] * 100)
   const canZoomIn = zoomIndex < ZOOM_STEPS.length - 1
@@ -19,9 +21,9 @@ export default function Toolbar({ zoomIndex, onZoomIn, onZoomOut }: ToolbarProps
 
   return (
     <div className="h-11 bg-gray-900 border-b border-gray-800 flex items-center gap-2 px-4 shrink-0">
-      {/* Draw / Select tools */}
-      <span className="text-xs text-gray-500 mr-1">Tool:</span>
 
+      {/* Tool selector */}
+      <span className="text-xs text-gray-500 mr-1">Tool:</span>
       <button
         onClick={() => setActiveTool('select')}
         title="Select & move bubbles (S)"
@@ -34,7 +36,6 @@ export default function Toolbar({ zoomIndex, onZoomIn, onZoomOut }: ToolbarProps
       >
         ↖ Select
       </button>
-
       <button
         onClick={() => setActiveTool('draw')}
         title="Draw new bubble (D)"
@@ -48,12 +49,39 @@ export default function Toolbar({ zoomIndex, onZoomIn, onZoomOut }: ToolbarProps
         ▭ Draw Bubble
       </button>
 
-      {/* Divider */}
+      <span className="text-gray-700 mx-2">|</span>
+
+      {/* Shape selector */}
+      <span className="text-xs text-gray-500 mr-1">Shape:</span>
+      <button
+        onClick={() => setActiveBubbleShape('rect')}
+        title="Rectangle bubble"
+        className={`
+          px-3 py-1.5 rounded text-xs font-medium transition-colors
+          ${activeBubbleShape === 'rect'
+            ? 'bg-indigo-600 text-white'
+            : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'}
+        `}
+      >
+        ▭ Rect
+      </button>
+      <button
+        onClick={() => setActiveBubbleShape('ellipse')}
+        title="Oval / ellipse bubble"
+        className={`
+          px-3 py-1.5 rounded text-xs font-medium transition-colors
+          ${activeBubbleShape === 'ellipse'
+            ? 'bg-indigo-600 text-white'
+            : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'}
+        `}
+      >
+        ◯ Oval
+      </button>
+
       <span className="text-gray-700 mx-2">|</span>
 
       {/* Zoom controls */}
       <span className="text-xs text-gray-500 mr-1">Zoom:</span>
-
       <button
         onClick={onZoomOut}
         disabled={!canZoomOut}
@@ -67,11 +95,9 @@ export default function Toolbar({ zoomIndex, onZoomIn, onZoomOut }: ToolbarProps
       >
         −
       </button>
-
       <span className="text-xs text-gray-300 w-10 text-center tabular-nums">
         {zoomPercent}%
       </span>
-
       <button
         onClick={onZoomIn}
         disabled={!canZoomIn}
@@ -86,10 +112,10 @@ export default function Toolbar({ zoomIndex, onZoomIn, onZoomOut }: ToolbarProps
         +
       </button>
 
-      {/* Hint text */}
+      {/* Hint */}
       <span className="text-gray-700 text-xs ml-4">
         {activeTool === 'draw'
-          ? 'Drag to draw bubbles. Switch to Select when done.'
+          ? `Drawing ${activeBubbleShape === 'ellipse' ? 'oval' : 'rectangle'} bubbles. Switch to Select when done.`
           : 'Click a bubble to select it. Drag to move. Delete key to remove.'}
       </span>
     </div>
