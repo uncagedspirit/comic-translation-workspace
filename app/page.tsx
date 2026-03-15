@@ -1,18 +1,21 @@
-import ChapterUploader from '@/components/upload/ChapterUploader'
+import BetaBanner from '@/components/landing/BetaBanner'
+import Navbar from '@/components/landing/Navbar'
+import Hero from '@/components/landing/Hero'
+import HowItWorks from '@/components/landing/HowItWorks'
+import InteractiveDemo from '@/components/landing/InteractiveDemo'
+import FeedbackSection from '@/components/landing/FeedbackSection'
+import Footer from '@/components/landing/Footer'
 
-export default function HomePage() {
+export default function LandingPage() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center gap-8 px-4">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-100 mb-2">
-          Comic Translation Workspace
-        </h1>
-        <p className="text-gray-400 max-w-md">
-          Upload your raw chapter pages, mark speech bubbles,
-          type translations, and export a finished chapter — all in one place.
-        </p>
-      </div>
-      <ChapterUploader />
-    </main>
+    <div className="min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <BetaBanner />
+      <Navbar />
+      <Hero />
+      <HowItWorks />
+      <InteractiveDemo />
+      <FeedbackSection />
+      <Footer />
+    </div>
   )
 }
