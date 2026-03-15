@@ -1,12 +1,19 @@
 'use client'
 
 import { useParams } from 'next/navigation'
+import { useEffect } from 'react'
 import { useProjectStore } from '@/lib/store'
+import WorkspaceLayout from '@/components/workspace/WorkspaceLayout'
 
 export default function WorkspacePage() {
   const params = useParams()
   const projectId = params.projectId as string
   const project = useProjectStore((s) => s.projects[projectId])
+  const setCurrentProject = useProjectStore((s) => s.setCurrentProject)
+
+  useEffect(() => {
+    if (projectId) setCurrentProject(projectId)
+  }, [projectId, setCurrentProject])
 
   if (!project) {
     return (
@@ -21,13 +28,5 @@ export default function WorkspacePage() {
     )
   }
 
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <p className="text-gray-300 text-lg font-medium">{project.name}</p>
-        <p className="text-gray-500 text-sm mt-1">{project.pages.length} pages loaded</p>
-        <p className="text-gray-600 text-xs mt-4">Workspace coming in next phase</p>
-      </div>
-    </div>
-  )
+  return <WorkspaceLayout />
 }

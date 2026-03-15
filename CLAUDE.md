@@ -53,7 +53,7 @@ composited pages — all without leaving the browser.
 - When exporting, use Konva's .toDataURL() not html2canvas.
 
 ## Current Status
-- Phase: C (Upload Flow)
-- Completed: [project initialized, dependencies installed, file structure created, Zustand store]
-- In Progress: Upload flow
+- Phase: D (Page Canvas)
+- Completed: [project initialized, dependencies installed, file structure created, Zustand store, upload flow]
+- In Progress: Page canvas — image display + page navigation
 - Blocked: None
