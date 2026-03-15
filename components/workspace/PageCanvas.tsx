@@ -7,7 +7,14 @@ import { useProjectStore } from '@/lib/store'
 import BubbleRect from './BubbleRect'
 import TextOverlay from './TextOverlay'
 
-export default function PageCanvas() {
+const ZOOM_STEPS = [0.25, 0.33, 0.5, 0.67, 0.75, 1.0, 1.25, 1.5]
+const DEFAULT_ZOOM_INDEX = 2 // 0.5 = 50%
+
+interface PageCanvasProps {
+  zoom: number
+}
+
+export default function PageCanvas({ zoom }: PageCanvasProps) {
   const currentPage = useProjectStore((s) => s.getCurrentPage())
   const currentPageIndex = useProjectStore((s) => s.currentPageIndex)
   const bubbles = useProjectStore((s) => s.getCurrentPageBubbles())
@@ -18,18 +25,16 @@ export default function PageCanvas() {
   const addBubble = useProjectStore((s) => s.addBubble)
   const deleteBubble = useProjectStore((s) => s.deleteBubble)
 
-  const containerRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<Konva.Stage>(null)
-
   const [image, setImage] = useState<HTMLImageElement | null>(null)
-  const [containerSize, setContainerSize] = useState({ width: 800, height: 600 })
-  const [scale, setScale] = useState(1)
   const [imageSize, setImageSize] = useState({ width: 800, height: 600 })
 
   // Drawing state
   const [isDrawing, setIsDrawing] = useState(false)
   const [drawStart, setDrawStart] = useState({ x: 0, y: 0 })
-  const [drawRect, setDrawRect] = useState<{ x: number; y: number; width: number; height: number } | null>(null)
+  const [drawRect, setDrawRect] = useState<{
+    x: number; y: number; width: number; height: number
+  } | null>(null)
 
   // Load image when page changes
   useEffect(() => {
@@ -42,31 +47,10 @@ export default function PageCanvas() {
     }
   }, [currentPage?.imageUrl])
 
-  // Measure container
-  useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect
-        setContainerSize({ width, height })
-      }
-    })
-    if (containerRef.current) observer.observe(containerRef.current)
-    return () => observer.disconnect()
-  }, [])
-
-  // Calculate scale to fit image in container
-  useEffect(() => {
-    if (imageSize.width === 0) return
-    const scaleX = containerSize.width / imageSize.width
-    const scaleY = containerSize.height / imageSize.height
-    setScale(Math.min(scaleX, scaleY, 1))
-  }, [containerSize, imageSize])
-
-  // Keyboard delete
+  // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.key === 'Delete' || e.key === 'Backspace') && selectedBubbleId) {
-        // Don't delete if user is typing in an input
         if (document.activeElement?.tagName === 'TEXTAREA') return
         if (document.activeElement?.tagName === 'INPUT') return
         deleteBubble(selectedBubbleId)
@@ -78,14 +62,13 @@ export default function PageCanvas() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [selectedBubbleId, deleteBubble, setActiveTool])
 
-  const stageWidth = imageSize.width * scale
-  const stageHeight = imageSize.height * scale
+  const stageWidth = imageSize.width * zoom
+  const stageHeight = imageSize.height * zoom
 
   const getPointerPos = () => {
     const stage = stageRef.current
     if (!stage) return { x: 0, y: 0 }
-    const pos = stage.getPointerPosition()
-    return pos ?? { x: 0, y: 0 }
+    return stage.getPointerPosition() ?? { x: 0, y: 0 }
   }
 
   const handleMouseDown = () => {
@@ -110,25 +93,21 @@ export default function PageCanvas() {
   const handleMouseUp = () => {
     if (!isDrawing || !drawRect) return
     setIsDrawing(false)
-
     if (drawRect.width > 10 && drawRect.height > 10) {
       const id = addBubble(
         currentPageIndex,
-        drawRect.x / scale,
-        drawRect.y / scale,
-        drawRect.width / scale,
-        drawRect.height / scale
+        drawRect.x / zoom,
+        drawRect.y / zoom,
+        drawRect.width / zoom,
+        drawRect.height / zoom
       )
       setSelectedBubble(id)
-      
     }
     setDrawRect(null)
   }
 
   const handleStageClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    if (e.target === e.target.getStage()) {
-      setSelectedBubble(null)
-    }
+    if (e.target === e.target.getStage()) setSelectedBubble(null)
   }
 
   if (!currentPage) {
@@ -140,49 +119,58 @@ export default function PageCanvas() {
   }
 
   return (
+    // Scrollable container
     <div
-      ref={containerRef}
-      className="flex-1 flex items-center justify-center bg-gray-950 overflow-hidden"
+      className="flex-1 overflow-auto bg-gray-950"
       style={{ cursor: activeTool === 'draw' ? 'crosshair' : 'default' }}
     >
-      {image ? (
-        <Stage
-          ref={stageRef}
-          width={stageWidth}
-          height={stageHeight}
-          listening={true}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onClick={handleStageClick}
-        >
-          <Layer>
-            <KonvaImage image={image} width={stageWidth} height={stageHeight} />
-          </Layer>
-          <Layer>
-            {bubbles.map((bubble) => (
-              <BubbleRect key={bubble.id} bubble={bubble} scale={scale} />
-            ))}
-            {bubbles.map((bubble) => (
-              <TextOverlay key={`text-${bubble.id}`} bubble={bubble} scale={scale} />
-            ))}
-            {isDrawing && drawRect && (
-              <Rect
-                x={drawRect.x}
-                y={drawRect.y}
-                width={drawRect.width}
-                height={drawRect.height}
-                fill="rgba(99, 102, 241, 0.2)"
-                stroke="#818cf8"
-                strokeWidth={1.5}
-                dash={[4, 4]}
-              />
-            )}
-          </Layer>
-        </Stage>
-      ) : (
-        <div className="text-gray-600 text-sm">Loading page...</div>
-      )}
+      {/* Inner wrapper centers the stage when smaller than container */}
+      <div
+        className="min-h-full flex items-start justify-center p-6"
+        style={{ minWidth: stageWidth + 48 }}
+      >
+        {image ? (
+          <Stage
+            ref={stageRef}
+            width={stageWidth}
+            height={stageHeight}
+            listening={true}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onClick={handleStageClick}
+            style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.6)' }}
+          >
+            <Layer>
+              <KonvaImage image={image} width={stageWidth} height={stageHeight} />
+            </Layer>
+            <Layer>
+              {bubbles.map((bubble) => (
+                <BubbleRect key={bubble.id} bubble={bubble} scale={zoom} />
+              ))}
+              {bubbles.map((bubble) => (
+                <TextOverlay key={`text-${bubble.id}`} bubble={bubble} scale={zoom} />
+              ))}
+              {isDrawing && drawRect && (
+                <Rect
+                  x={drawRect.x}
+                  y={drawRect.y}
+                  width={drawRect.width}
+                  height={drawRect.height}
+                  fill="rgba(99, 102, 241, 0.2)"
+                  stroke="#818cf8"
+                  strokeWidth={1.5}
+                  dash={[4, 4]}
+                />
+              )}
+            </Layer>
+          </Stage>
+        ) : (
+          <div className="text-gray-600 text-sm mt-20">Loading page...</div>
+        )}
+      </div>
     </div>
   )
 }
+
+export { ZOOM_STEPS, DEFAULT_ZOOM_INDEX }
