@@ -62,9 +62,9 @@ export default function InteractiveDemo() {
   return (
     <section id="demo" className="border-b-[3px] border-white">
       {/* Section header */}
-      <div className="border-b-[3px] border-white px-6 py-6 flex items-center justify-between bg-[#111]">
+      <div className="border-b-[3px] border-white px-6 py-6 flex items-center justify-between bg-[#C84B31]">
         <div>
-          <p className="text-xs font-black tracking-[0.3em] uppercase text-gray-600 mb-1">Chapter 2</p>
+          <p className="text-xs font-black tracking-[0.3em] uppercase text-white/60 mb-1">Chapter 2</p>
           <h2
             className="text-5xl md:text-6xl text-white"
             style={{ fontFamily: 'var(--font-bangers)', letterSpacing: '0.06em' }}
@@ -72,7 +72,7 @@ export default function InteractiveDemo() {
             TRY IT NOW
           </h2>
         </div>
-        <p className="text-sm text-gray-500 max-w-xs text-right hidden md:block">
+        <p className="text-sm text-white max-w-xs text-right hidden md:block">
           A live preview of the workspace. Draw a bubble, type a translation.
         </p>
       </div>
