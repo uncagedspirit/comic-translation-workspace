@@ -3,7 +3,6 @@ import { persist } from 'zustand/middleware'
 import { Project, Page, Bubble, ActiveTool, BubbleShape } from './types'
 
 interface ProjectStore {
-  // State
   projects: Record<string, Project>
   currentProjectId: string | null
   currentPageIndex: number
@@ -11,28 +10,22 @@ interface ProjectStore {
   activeTool: ActiveTool
   activeBubbleShape: BubbleShape
 
-  // Project actions
   createProject: (name: string, imageUrls: string[]) => string
   deleteProject: (projectId: string) => void
 
-  // Navigation
   setCurrentProject: (projectId: string) => void
   setCurrentPage: (index: number) => void
 
-  // Bubble actions
   addBubble: (pageIndex: number, x: number, y: number, width: number, height: number, shape: BubbleShape) => string
   updateBubble: (bubbleId: string, updates: Partial<Bubble>) => void
   deleteBubble: (bubbleId: string) => void
 
-  // Translation actions
   updateTranslation: (bubbleId: string, text: string) => void
 
-  // UI actions
   setSelectedBubble: (id: string | null) => void
   setActiveTool: (tool: ActiveTool) => void
   setActiveBubbleShape: (shape: BubbleShape) => void
 
-  // Selectors
   getCurrentProject: () => Project | null
   getCurrentPage: () => Page | null
   getCurrentPageBubbles: () => Bubble[]
@@ -42,15 +35,13 @@ interface ProjectStore {
 export const useProjectStore = create<ProjectStore>()(
   persist(
     (set, get) => ({
-      // Initial state
       projects: {},
       currentProjectId: null,
       currentPageIndex: 0,
       selectedBubbleId: null,
-      activeTool: 'select',
-      activeBubbleShape: 'rect',
+      activeTool: 'draw',     // default: draw
+      activeBubbleShape: 'ellipse', // default: oval
 
-      // Project actions
       createProject: (name, imageUrls) => {
         const projectId = crypto.randomUUID()
         const pages: Page[] = imageUrls.map((imageUrl) => ({
@@ -84,7 +75,6 @@ export const useProjectStore = create<ProjectStore>()(
         })
       },
 
-      // Navigation
       setCurrentProject: (projectId) => {
         set({ currentProjectId: projectId, currentPageIndex: 0, selectedBubbleId: null })
       },
@@ -93,7 +83,6 @@ export const useProjectStore = create<ProjectStore>()(
         set({ currentPageIndex: index, selectedBubbleId: null })
       },
 
-      // Bubble actions
       addBubble: (pageIndex, x, y, width, height, shape) => {
         const bubbleId = crypto.randomUUID()
         const bubble: Bubble = {
@@ -162,17 +151,14 @@ export const useProjectStore = create<ProjectStore>()(
         })
       },
 
-      // Translation actions
       updateTranslation: (bubbleId, text) => {
         get().updateBubble(bubbleId, { translation: text })
       },
 
-      // UI actions
       setSelectedBubble: (id) => set({ selectedBubbleId: id }),
       setActiveTool: (tool) => set({ activeTool: tool }),
       setActiveBubbleShape: (shape) => set({ activeBubbleShape: shape }),
 
-      // Selectors
       getCurrentProject: () => {
         const { projects, currentProjectId } = get()
         return currentProjectId ? projects[currentProjectId] ?? null : null

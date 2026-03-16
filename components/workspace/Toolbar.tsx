@@ -18,6 +18,7 @@ export default function Toolbar({ zoomIndex, onZoomIn, onZoomOut }: ToolbarProps
   const zoomPercent = Math.round(ZOOM_STEPS[zoomIndex] * 100)
   const canZoomIn = zoomIndex < ZOOM_STEPS.length - 1
   const canZoomOut = zoomIndex > 0
+  const isSelectMode = activeTool === 'select'
 
   return (
     <div className="h-11 bg-gray-900 border-b border-gray-800 flex items-center gap-2 px-4 shrink-0">
@@ -51,28 +52,36 @@ export default function Toolbar({ zoomIndex, onZoomIn, onZoomOut }: ToolbarProps
 
       <span className="text-gray-700 mx-2">|</span>
 
-      {/* Shape selector */}
-      <span className="text-xs text-gray-500 mr-1">Shape:</span>
+      {/* Shape selector — disabled when in select mode */}
+      <span className={`text-xs mr-1 ${isSelectMode ? 'text-gray-700' : 'text-gray-500'}`}>
+        Shape:
+      </span>
       <button
         onClick={() => setActiveBubbleShape('rect')}
+        disabled={isSelectMode}
         title="Rectangle bubble"
         className={`
           px-3 py-1.5 rounded text-xs font-medium transition-colors
-          ${activeBubbleShape === 'rect'
-            ? 'bg-indigo-600 text-white'
-            : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'}
+          ${isSelectMode
+            ? 'bg-gray-800/40 text-gray-700 cursor-not-allowed'
+            : activeBubbleShape === 'rect'
+              ? 'bg-indigo-600 text-white'
+              : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'}
         `}
       >
         ▭ Rect
       </button>
       <button
         onClick={() => setActiveBubbleShape('ellipse')}
+        disabled={isSelectMode}
         title="Oval / ellipse bubble"
         className={`
           px-3 py-1.5 rounded text-xs font-medium transition-colors
-          ${activeBubbleShape === 'ellipse'
-            ? 'bg-indigo-600 text-white'
-            : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'}
+          ${isSelectMode
+            ? 'bg-gray-800/40 text-gray-700 cursor-not-allowed'
+            : activeBubbleShape === 'ellipse'
+              ? 'bg-indigo-600 text-white'
+              : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'}
         `}
       >
         ◯ Oval
