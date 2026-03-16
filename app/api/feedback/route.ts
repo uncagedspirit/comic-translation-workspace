@@ -1,36 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { saveFeedback } from '@/lib/appwrite-server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { hasUserExported, markUserExported } from '@/lib/appwrite-server'
 
-export async function POST(req: NextRequest) {
+// GET /api/user/export-flag
+// Returns { hasExported: boolean } for the signed-in user
+export async function GET() {
   try {
-    const body = await req.json()
-    const { name, email, message, rating } = body as {
-      name?: string
-      email?: string
-      message?: string
-      rating?: number
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ hasExported: false })
     }
 
-    if (!email?.trim() || !message?.trim()) {
-      return NextResponse.json(
-        { error: 'Email and message are required.' },
-        { status: 400 }
-      )
-    }
-
-    await saveFeedback({
-      name: name?.trim() ?? '',
-      email: email.trim(),
-      message: message.trim(),
-      rating: rating ?? 5,
-    })
-
-    return NextResponse.json({ success: true })
+    const result = await hasUserExported(session.user.email)
+    return NextResponse.json({ hasExported: result })
   } catch (err) {
-    console.error('[Feedback API] Error:', err)
-    return NextResponse.json(
-      { error: 'Failed to submit feedback. Please try again.' },
-      { status: 500 }
-    )
+    console.error('[export-flag GET]', err)
+    // Fail open — never block the export
+    return NextResponse.json({ hasExported: false })
+  }
+}
+
+// POST /api/user/export-flag
+// Marks the signed-in user as having exported at least once
+export async function POST(req: NextRequest) {
+  // Unused but typed to satisfy Next.js route signature
+  void req
+
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ ok: false, reason: 'unauthenticated' }, { status: 401 })
+    }
+
+    await markUserExported(session.user.email)
+    return NextResponse.json({ ok: true })
+  } catch (err) {
+    console.error('[export-flag POST]', err)
+    return NextResponse.json({ ok: false }, { status: 500 })
   }
 }

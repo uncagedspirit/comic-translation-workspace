@@ -6,9 +6,11 @@ import PageNavigator from './PageNavigator'
 import Toolbar from './Toolbar'
 import TranslationPanel from '@/components/panel/TranslationPanel'
 import ExportButton from './ExportButton'
+import ExportFeedbackModal from './ExportFeedbackModal'
 
 export default function WorkspaceLayout() {
   const [zoomIndex, setZoomIndex] = useState(DEFAULT_ZOOM_INDEX)
+  const [showFeedback, setShowFeedback] = useState(false)
 
   const handleZoomIn = () =>
     setZoomIndex((i) => Math.min(i + 1, ZOOM_STEPS.length - 1))
@@ -34,7 +36,19 @@ export default function WorkspaceLayout() {
             Comic Translation Workspace
           </span>
         </div>
-        <ExportButton />
+
+        <div className="flex items-center gap-3">
+          {/* Feedback button */}
+          <button
+            onClick={() => setShowFeedback(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium text-gray-400 border border-gray-700 hover:border-gray-500 hover:text-gray-200 transition-colors"
+          >
+            <span>💬</span>
+            Feedback
+          </button>
+
+          <ExportButton />
+        </div>
       </div>
 
       {/* Main area */}
@@ -55,6 +69,11 @@ export default function WorkspaceLayout() {
           <TranslationPanel />
         </div>
       </div>
+
+      {/* Manual feedback modal (from the button) */}
+      {showFeedback && (
+        <ExportFeedbackModal onClose={() => setShowFeedback(false)} />
+      )}
     </div>
   )
 }
