@@ -1,7 +1,6 @@
 'use client'
 
 import { useProjectStore } from '@/lib/store'
-import Image from 'next/image'
 
 export default function PageNavigator() {
   const project = useProjectStore((s) => s.getCurrentProject())
@@ -11,12 +10,14 @@ export default function PageNavigator() {
   if (!project) return null
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2 bg-gray-900 border-t border-gray-800 overflow-x-auto">
-      <span className="text-xs text-gray-500 shrink-0">
+    <div className="flex items-center bg-gray-900 border-t border-gray-800 shrink-0">
+      {/* Label — never scrolls */}
+      <span className="text-xs text-gray-500 shrink-0 px-4 py-2 border-r border-gray-800">
         Page {currentPageIndex + 1} / {project.pages.length}
       </span>
 
-      <div className="flex gap-2 ml-2">
+      {/* Thumbnails — scroll horizontally only */}
+      <div className="flex gap-2 px-3 py-2 overflow-x-auto">
         {project.pages.map((page, index) => (
           <button
             key={index}
