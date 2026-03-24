@@ -10,6 +10,7 @@ export interface Bubble {
   translation: string
   shape: BubbleShape
   bgColor: string
+  fontFamily: string
 }
 
 export interface Page {

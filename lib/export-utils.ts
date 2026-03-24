@@ -26,12 +26,12 @@ async function renderPageToPng(
     img.crossOrigin = 'anonymous'
 
     img.onload = () => {
-      const width = img.naturalWidth
+      const width  = img.naturalWidth
       const height = img.naturalHeight
 
       const container = document.createElement('div')
       container.style.position = 'absolute'
-      container.style.top = '-9999px'
+      container.style.top  = '-9999px'
       container.style.left = '-9999px'
       document.body.appendChild(container)
 
@@ -39,35 +39,33 @@ async function renderPageToPng(
       const layer = new Konva.Layer()
       stage.add(layer)
 
-      const konvaImage = new Konva.Image({ image: img, width, height })
-      layer.add(konvaImage)
+      layer.add(new Konva.Image({ image: img, width, height }))
 
       for (const bubble of page.bubbles) {
         if (!bubble.translation.trim()) continue
 
-        const padding = 8
-        const bgColor = bubble.bgColor ?? '#ffffff'
-        const textColor = isColorLight(bgColor) ? 'black' : 'white'
+        const padding    = 8
+        const bgColor    = bubble.bgColor    ?? '#ffffff'
+        const fontFamily = bubble.fontFamily ?? 'Bangers'
+        const textColor  = isColorLight(bgColor) ? 'black' : 'white'
 
         if (bubble.shape === 'ellipse') {
-          const bgEllipse = new Konva.Ellipse({
-            x: bubble.x + bubble.width / 2,
-            y: bubble.y + bubble.height / 2,
-            radiusX: bubble.width / 2 - 4,
+          layer.add(new Konva.Ellipse({
+            x:       bubble.x + bubble.width  / 2,
+            y:       bubble.y + bubble.height / 2,
+            radiusX: bubble.width  / 2 - 4,
             radiusY: bubble.height / 2 - 4,
-            fill: bgColor,
-          })
-          layer.add(bgEllipse)
+            fill:    bgColor,
+          }))
         } else {
-          const bgRect = new Konva.Rect({
-            x: bubble.x + 4,
-            y: bubble.y + 4,
-            width: bubble.width - 8,
-            height: bubble.height - 8,
-            fill: bgColor,
+          layer.add(new Konva.Rect({
+            x:            bubble.x + 4,
+            y:            bubble.y + 4,
+            width:        bubble.width  - 8,
+            height:       bubble.height - 8,
+            fill:         bgColor,
             cornerRadius: 4,
-          })
-          layer.add(bgRect)
+          }))
         }
 
         const { fontSize } = fitText(
@@ -76,23 +74,22 @@ async function renderPageToPng(
           bubble.height,
           28,
           8,
-          'Bangers'
+          fontFamily
         )
 
-        const text = new Konva.Text({
-          text: bubble.translation,
-          x: bubble.x + padding,
-          y: bubble.y + padding,
-          width: bubble.width - padding * 2,
-          height: bubble.height - padding * 2,
+        layer.add(new Konva.Text({
+          text:          bubble.translation,
+          x:             bubble.x + padding,
+          y:             bubble.y + padding,
+          width:         bubble.width  - padding * 2,
+          height:        bubble.height - padding * 2,
           fontSize,
-          fontFamily: 'Bangers',
-          fill: textColor,
-          align: 'center',
+          fontFamily,
+          fill:          textColor,
+          align:         'center',
           verticalAlign: 'middle',
-          wrap: 'word',
-        })
-        layer.add(text)
+          wrap:          'word',
+        }))
       }
 
       layer.draw()
@@ -118,15 +115,15 @@ export async function exportChapter(project: Project): Promise<void> {
 
   for (let i = 0; i < project.pages.length; i++) {
     const dataUrl = await renderPageToPng(project, i)
-    const base64 = dataUrl.split(',')[1]
+    const base64  = dataUrl.split(',')[1]
     const pageNum = String(i + 1).padStart(2, '0')
     zip.file(`page-${pageNum}.png`, base64, { base64: true })
   }
 
   const blob = await zip.generateAsync({ type: 'blob' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement('a')
+  a.href     = url
   a.download = `${project.name.replace(/[^a-z0-9]/gi, '-')}.zip`
   a.click()
   URL.revokeObjectURL(url)

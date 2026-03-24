@@ -95,6 +95,7 @@ export const useProjectStore = create<ProjectStore>()(
           translation: '',
           shape,
           bgColor: '#ffffff',
+          fontFamily: 'Bangers',
         }
         set((state) => {
           const project = state.projects[state.currentProjectId!]

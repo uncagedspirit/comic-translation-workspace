@@ -13,20 +13,31 @@ const PRESETS = [
   { color: '#000000', label: 'Black' },
 ]
 
+export const MANGA_FONTS: { name: string; label: string }[] = [
+  { name: 'Bangers',          label: 'Bangers'    },
+  { name: 'Permanent Marker', label: 'Marker'     },
+  { name: 'Boogaloo',         label: 'Boogaloo'   },
+  { name: 'Chewy',            label: 'Chewy'      },
+  { name: 'Caveat',           label: 'Caveat'     },
+  { name: 'Patrick Hand',     label: 'Patrick'    },
+  { name: 'Comic Neue',       label: 'Comic Neue' },
+]
+
 interface BubbleTranslationRowProps {
   bubble: Bubble
   index: number
 }
 
 export default function BubbleTranslationRow({ bubble, index }: BubbleTranslationRowProps) {
-  const selectedBubbleId = useProjectStore((s) => s.selectedBubbleId)
+  const selectedBubbleId  = useProjectStore((s) => s.selectedBubbleId)
   const setSelectedBubble = useProjectStore((s) => s.setSelectedBubble)
   const updateTranslation = useProjectStore((s) => s.updateTranslation)
-  const updateBubble = useProjectStore((s) => s.updateBubble)
+  const updateBubble      = useProjectStore((s) => s.updateBubble)
 
   const isSelected = selectedBubbleId === bubble.id
-  const bgColor = bubble.bgColor ?? '#ffffff'
-  const isLight = isColorLight(bgColor)
+  const bgColor    = bubble.bgColor    ?? '#ffffff'
+  const fontFamily = bubble.fontFamily ?? 'Bangers'
+  const isLight    = isColorLight(bgColor)
 
   return (
     <div
@@ -38,27 +49,18 @@ export default function BubbleTranslationRow({ bubble, index }: BubbleTranslatio
       `}
       onClick={() => setSelectedBubble(bubble.id)}
     >
-      {/* Header row */}
+      {/* Header */}
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-medium text-gray-400">
-          Bubble {index + 1}
-        </span>
-        {!bubble.translation && (
-          <span className="text-xs text-amber-500/70">empty</span>
-        )}
-        {bubble.translation && (
-          <span className="text-xs text-green-500/70">✓</span>
-        )}
+        <span className="text-xs font-medium text-gray-400">Bubble {index + 1}</span>
+        {!bubble.translation && <span className="text-xs text-amber-500/70">empty</span>}
+        {bubble.translation  && <span className="text-xs text-green-500/70">✓</span>}
       </div>
 
-      {/* Translation textarea */}
+      {/* Textarea */}
       <textarea
         value={bubble.translation}
         onChange={(e) => updateTranslation(bubble.id, e.target.value)}
-        onClick={(e) => {
-          e.stopPropagation()
-          setSelectedBubble(bubble.id)
-        }}
+        onClick={(e) => { e.stopPropagation(); setSelectedBubble(bubble.id) }}
         placeholder="Type translation here..."
         rows={3}
         className={`
@@ -71,16 +73,13 @@ export default function BubbleTranslationRow({ bubble, index }: BubbleTranslatio
         `}
       />
 
-      {/* Color picker */}
+      {/* ── Fill colour picker ── */}
       <div
-        className="flex items-center gap-1.5 flex-wrap"
+        className="flex items-center gap-1.5 flex-wrap mb-2"
         onClick={(e) => e.stopPropagation()}
       >
-        <span className="text-[10px] text-gray-600 uppercase tracking-wider mr-0.5">
-          Fill
-        </span>
+        <span className="text-[10px] text-gray-600 uppercase tracking-wider mr-0.5">Fill</span>
 
-        {/* Preset swatches */}
         {PRESETS.map(({ color, label }) => (
           <button
             key={color}
@@ -88,18 +87,18 @@ export default function BubbleTranslationRow({ bubble, index }: BubbleTranslatio
             onClick={() => updateBubble(bubble.id, { bgColor: color })}
             className="w-4 h-4 rounded-full border transition-transform hover:scale-110 shrink-0"
             style={{
-              background: color,
+              background:  color,
               borderColor: bgColor === color ? '#818cf8' : 'rgba(255,255,255,0.2)',
-              boxShadow: bgColor === color ? '0 0 0 1.5px #818cf8' : 'none',
+              boxShadow:   bgColor === color ? '0 0 0 1.5px #818cf8' : 'none',
             }}
           />
         ))}
 
-        {/* Custom color input */}
+        {/* Colour wheel — custom */}
         <label
           title="Custom color"
           className="w-4 h-4 rounded-full border border-white/20 overflow-hidden cursor-pointer shrink-0 relative hover:scale-110 transition-transform"
-          style={{ background: 'conic-gradient(red, yellow, lime, cyan, blue, magenta, red)' }}
+          style={{ background: 'conic-gradient(red,yellow,lime,cyan,blue,magenta,red)' }}
         >
           <input
             type="color"
@@ -109,18 +108,40 @@ export default function BubbleTranslationRow({ bubble, index }: BubbleTranslatio
           />
         </label>
 
-        {/* Current color preview */}
+        {/* Hex preview chip */}
         <div
-          className="ml-auto flex items-center gap-1 px-1.5 py-0.5 rounded border border-white/10"
+          className="ml-auto flex items-center px-1.5 py-0.5 rounded border border-white/10"
           style={{ background: bgColor }}
         >
-          <span
-            className="text-[10px] font-mono"
-            style={{ color: isLight ? '#00000080' : '#ffffff80' }}
-          >
+          <span className="text-[10px] font-mono" style={{ color: isLight ? '#00000080' : '#ffffff80' }}>
             {bgColor}
           </span>
         </div>
+      </div>
+
+      {/* ── Font picker ── */}
+      <div
+        className="flex items-center gap-1 flex-wrap"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <span className="text-[10px] text-gray-600 uppercase tracking-wider mr-0.5 shrink-0">Font</span>
+
+        {MANGA_FONTS.map((f) => (
+          <button
+            key={f.name}
+            title={f.name}
+            onClick={() => updateBubble(bubble.id, { fontFamily: f.name })}
+            className={`
+              px-1.5 py-0.5 rounded text-[11px] leading-snug transition-colors border shrink-0
+              ${fontFamily === f.name
+                ? 'border-indigo-400 bg-indigo-900/50 text-indigo-200'
+                : 'border-gray-700 bg-gray-800 text-gray-400 hover:border-gray-500 hover:text-gray-200'}
+            `}
+            style={{ fontFamily: f.name }}
+          >
+            {f.label}
+          </button>
+        ))}
       </div>
     </div>
   )
