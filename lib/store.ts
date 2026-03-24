@@ -39,8 +39,8 @@ export const useProjectStore = create<ProjectStore>()(
       currentProjectId: null,
       currentPageIndex: 0,
       selectedBubbleId: null,
-      activeTool: 'draw',     // default: draw
-      activeBubbleShape: 'ellipse', // default: oval
+      activeTool: 'draw',
+      activeBubbleShape: 'ellipse',
 
       createProject: (name, imageUrls) => {
         const projectId = crypto.randomUUID()
@@ -94,6 +94,7 @@ export const useProjectStore = create<ProjectStore>()(
           height,
           translation: '',
           shape,
+          bgColor: '#ffffff',
         }
         set((state) => {
           const project = state.projects[state.currentProjectId!]

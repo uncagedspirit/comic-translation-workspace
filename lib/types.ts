@@ -9,6 +9,7 @@ export interface Bubble {
   height: number
   translation: string
   shape: BubbleShape
+  bgColor: string
 }
 
 export interface Page {

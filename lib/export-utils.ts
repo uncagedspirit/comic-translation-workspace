@@ -3,6 +3,17 @@ import JSZip from 'jszip'
 import { Project } from './types'
 import { fitText } from './text-fit'
 
+function isColorLight(hex: string): boolean {
+  try {
+    const r = parseInt(hex.slice(1, 3), 16)
+    const g = parseInt(hex.slice(3, 5), 16)
+    const b = parseInt(hex.slice(5, 7), 16)
+    return (r * 299 + g * 587 + b * 114) / 1000 > 128
+  } catch {
+    return true
+  }
+}
+
 async function renderPageToPng(
   project: Project,
   pageIndex: number
@@ -28,7 +39,6 @@ async function renderPageToPng(
       const layer = new Konva.Layer()
       stage.add(layer)
 
-      // Base image
       const konvaImage = new Konva.Image({ image: img, width, height })
       layer.add(konvaImage)
 
@@ -36,15 +46,16 @@ async function renderPageToPng(
         if (!bubble.translation.trim()) continue
 
         const padding = 8
+        const bgColor = bubble.bgColor ?? '#ffffff'
+        const textColor = isColorLight(bgColor) ? 'black' : 'white'
 
-        // White background — same shape as the bubble
         if (bubble.shape === 'ellipse') {
           const bgEllipse = new Konva.Ellipse({
             x: bubble.x + bubble.width / 2,
             y: bubble.y + bubble.height / 2,
             radiusX: bubble.width / 2 - 4,
             radiusY: bubble.height / 2 - 4,
-            fill: 'white',
+            fill: bgColor,
           })
           layer.add(bgEllipse)
         } else {
@@ -53,14 +64,12 @@ async function renderPageToPng(
             y: bubble.y + 4,
             width: bubble.width - 8,
             height: bubble.height - 8,
-            fill: 'white',
+            fill: bgColor,
             cornerRadius: 4,
           })
           layer.add(bgRect)
         }
 
-        // Get font size from fitText, then let Konva handle layout —
-        // identical to how TextOverlay works in the preview
         const { fontSize } = fitText(
           bubble.translation,
           bubble.width,
@@ -78,7 +87,7 @@ async function renderPageToPng(
           height: bubble.height - padding * 2,
           fontSize,
           fontFamily: 'Bangers',
-          fill: 'black',
+          fill: textColor,
           align: 'center',
           verticalAlign: 'middle',
           wrap: 'word',
