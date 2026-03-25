@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #EDE8E3;
+  --foreground: #2a2420;
 
-  /* American Retro Palette */
-  --primary:     #285A71;
-  --primary-dark: #1d4155;
-  --primary-light: #336b87;
-  --accent:      #CFDA5A;
-  --accent-dark: #b8c24a;
-  --cream:       #FCE4C0;
-  --cream-dark:  #f0d0a0;
+  /* Spring Palette */
+  --green:       #7AB648;
+  --green-dark:  #5d9130;
+  --green-light: #a0d068;
+  --coral:       #F2967E;
+  --coral-dark:  #e07560;
+  --peach:       #F7D9B0;
+  --linen:       #EDE8E3;
+  --linen-dark:  #ddd6ce;
+  --ink:         #2a2420;
+  --ink-light:   #6b5e56;
 }
 
 @theme inline {
@@ -28,32 +31,9 @@ body {
 }
 
 /* ── Minimalistic scrollbars ── */
-
-/* Webkit (Chrome, Safari, Edge) */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 2px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-/* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
-}
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(42,36,32,0.15); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(42,36,32,0.3); }
+::-webkit-scrollbar-corner { background: transparent; }
+* { scrollbar-width: thin; scrollbar-color: rgba(42,36,32,0.15) transparent; }

@@ -6,10 +6,7 @@ import Konva from 'konva'
 import { useProjectStore } from '@/lib/store'
 import { Bubble } from '@/lib/types'
 
-interface BubbleRectProps {
-  bubble: Bubble
-  scale: number
-}
+interface BubbleRectProps { bubble: Bubble; scale: number }
 
 export default function BubbleRect({ bubble, scale }: BubbleRectProps) {
   const rectRef = useRef<Konva.Rect>(null)
@@ -26,21 +23,16 @@ export default function BubbleRect({ bubble, scale }: BubbleRectProps) {
   useEffect(() => {
     if (isSelected && trRef.current) {
       const node = isEllipse ? ellipseRef.current : rectRef.current
-      if (node) {
-        trRef.current.nodes([node])
-        trRef.current.getLayer()?.batchDraw()
-      }
+      if (node) { trRef.current.nodes([node]); trRef.current.getLayer()?.batchDraw() }
     }
   }, [isSelected, isEllipse])
 
   const handleClick = () => setSelectedBubble(bubble.id)
-
   const hasTranslation = bubble.translation.trim().length > 0
 
   const sharedProps = {
-    // Selected: yellow-green stroke; unselected: muted teal stroke
-    fill: hasTranslation ? 'transparent' : 'rgba(40, 90, 113, 0.10)',
-    stroke: isSelected ? '#CFDA5A' : 'rgba(207, 218, 90, 0.5)',
+    fill: hasTranslation ? 'transparent' : 'rgba(122, 182, 72, 0.08)',
+    stroke: isSelected ? '#7AB648' : 'rgba(122, 182, 72, 0.45)',
     strokeWidth: isSelected ? 2 : 1.5,
     draggable: true,
     onClick: handleClick,
@@ -55,82 +47,32 @@ export default function BubbleRect({ bubble, scale }: BubbleRectProps) {
   return (
     <>
       {isEllipse ? (
-        <Ellipse
-          ref={ellipseRef}
-          x={cx}
-          y={cy}
-          radiusX={rx}
-          radiusY={ry}
-          {...sharedProps}
-          onDragEnd={(e) => {
-            updateBubble(bubble.id, {
-              x: e.target.x() / scale - bubble.width / 2,
-              y: e.target.y() / scale - bubble.height / 2,
-            })
-          }}
+        <Ellipse ref={ellipseRef} x={cx} y={cy} radiusX={rx} radiusY={ry} {...sharedProps}
+          onDragEnd={(e) => updateBubble(bubble.id, { x: e.target.x() / scale - bubble.width / 2, y: e.target.y() / scale - bubble.height / 2 })}
           onTransformEnd={() => {
             if (!ellipseRef.current) return
             const node = ellipseRef.current
-            const scaleX = node.scaleX()
-            const scaleY = node.scaleY()
-            node.scaleX(1)
-            node.scaleY(1)
+            const scaleX = node.scaleX(); const scaleY = node.scaleY()
+            node.scaleX(1); node.scaleY(1)
             const newWidth = (node.radiusX() * 2 * scaleX) / scale
             const newHeight = (node.radiusY() * 2 * scaleY) / scale
-            updateBubble(bubble.id, {
-              x: node.x() / scale - newWidth / 2,
-              y: node.y() / scale - newHeight / 2,
-              width: newWidth,
-              height: newHeight,
-            })
-          }}
-        />
+            updateBubble(bubble.id, { x: node.x() / scale - newWidth / 2, y: node.y() / scale - newHeight / 2, width: newWidth, height: newHeight })
+          }} />
       ) : (
-        <Rect
-          ref={rectRef}
-          x={bubble.x * scale}
-          y={bubble.y * scale}
-          width={bubble.width * scale}
-          height={bubble.height * scale}
-          cornerRadius={4}
-          {...sharedProps}
-          onDragEnd={(e) => {
-            updateBubble(bubble.id, {
-              x: e.target.x() / scale,
-              y: e.target.y() / scale,
-            })
-          }}
+        <Rect ref={rectRef} x={bubble.x * scale} y={bubble.y * scale} width={bubble.width * scale} height={bubble.height * scale} cornerRadius={6} {...sharedProps}
+          onDragEnd={(e) => updateBubble(bubble.id, { x: e.target.x() / scale, y: e.target.y() / scale })}
           onTransformEnd={() => {
             if (!rectRef.current) return
             const node = rectRef.current
-            const scaleX = node.scaleX()
-            const scaleY = node.scaleY()
-            node.scaleX(1)
-            node.scaleY(1)
-            updateBubble(bubble.id, {
-              x: node.x() / scale,
-              y: node.y() / scale,
-              width: (node.width() * scaleX) / scale,
-              height: (node.height() * scaleY) / scale,
-            })
-          }}
-        />
+            const scaleX = node.scaleX(); const scaleY = node.scaleY()
+            node.scaleX(1); node.scaleY(1)
+            updateBubble(bubble.id, { x: node.x() / scale, y: node.y() / scale, width: (node.width() * scaleX) / scale, height: (node.height() * scaleY) / scale })
+          }} />
       )}
-
       {isSelected && (
-        <Transformer
-          ref={trRef}
-          rotateEnabled={false}
-          // Style the transformer handles to match the palette
-          anchorFill="#CFDA5A"
-          anchorStroke="#285A71"
-          borderStroke="#CFDA5A"
-          anchorSize={8}
-          boundBoxFunc={(oldBox, newBox) => {
-            if (newBox.width < 20 || newBox.height < 20) return oldBox
-            return newBox
-          }}
-        />
+        <Transformer ref={trRef} rotateEnabled={false}
+          anchorFill="#7AB648" anchorStroke="#fff" borderStroke="#7AB648" anchorSize={8}
+          boundBoxFunc={(oldBox, newBox) => (newBox.width < 20 || newBox.height < 20 ? oldBox : newBox)} />
       )}
     </>
   )

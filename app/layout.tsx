@@ -48,7 +48,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${fontVars} font-sans bg-[#0a0a0a] text-gray-100 min-h-screen`}
+        className={`${fontVars} font-sans min-h-screen`}
+        style={{ background: '#EDE8E3', color: '#2a2420' }}
       >
         <SessionProvider>{children}</SessionProvider>
       </body>

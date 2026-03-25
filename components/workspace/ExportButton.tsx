@@ -1,5 +1,5 @@
+// ExportButton.tsx
 'use client'
-
 import { useState } from 'react'
 import { useProjectStore } from '@/lib/store'
 import { exportChapter } from '@/lib/export-utils'
@@ -13,67 +13,37 @@ export default function ExportButton() {
 
   const handleExport = async () => {
     if (!project) return
-    setIsExporting(true)
-    setError(null)
-
+    setIsExporting(true); setError(null)
     try {
       await exportChapter(project)
-
       const getRes = await fetch('/api/user/export-flag')
       const { hasExported } = await getRes.json() as { hasExported: boolean }
-
       if (hasExported === false) {
         const postRes = await fetch('/api/user/export-flag', { method: 'POST' })
-        if (postRes.ok) {
-          setTimeout(() => setShowFeedback(true), 800)
-        } else {
-          const body = await postRes.json()
-          console.error('[Export flag] POST failed:', postRes.status, body)
-        }
+        if (postRes.ok) setTimeout(() => setShowFeedback(true), 800)
       }
     } catch (err) {
-      console.error('Export failed:', err)
-      setError('Export failed. Check console for details.')
+      setError('Export failed.')
     } finally {
       setIsExporting(false)
     }
   }
 
-  const totalBubbles =
-    project?.pages.reduce((acc, page) => acc + page.bubbles.length, 0) ?? 0
-
-  const translatedBubbles =
-    project?.pages.reduce(
-      (acc, page) => acc + page.bubbles.filter((b) => b.translation.trim()).length,
-      0
-    ) ?? 0
+  const total = project?.pages.reduce((acc, p) => acc + p.bubbles.length, 0) ?? 0
+  const translated = project?.pages.reduce((acc, p) => acc + p.bubbles.filter(b => b.translation.trim()).length, 0) ?? 0
 
   return (
     <>
       <div className="flex items-center gap-3">
-        {totalBubbles > 0 && (
-          <span className="text-xs text-gray-500">
-            {translatedBubbles}/{totalBubbles} translated
-          </span>
-        )}
-        {error && <span className="text-xs text-red-400">{error}</span>}
-        <button
-          onClick={handleExport}
-          disabled={isExporting || !project}
-          className={`px-4 py-1.5 rounded text-sm font-medium transition-colors border-2 border-transparent ${
-            isExporting
-              ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-              : 'text-[#0a0a0a] hover:border-white hover:bg-transparent hover:text-white'
-          }`}
-          style={!isExporting ? { background: '#CFDA5A' } : {}}
-        >
+        {total > 0 && <span className="text-xs" style={{ color: '#6b5e56' }}>{translated}/{total} translated</span>}
+        {error && <span className="text-xs text-red-500">{error}</span>}
+        <button onClick={handleExport} disabled={isExporting || !project}
+          className="px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
+          style={isExporting ? { background: '#ddd6ce', color: '#6b5e56', cursor: 'not-allowed' } : { background: '#7AB648', color: '#fff', boxShadow: '0 2px 8px rgba(122,182,72,0.3)' }}>
           {isExporting ? 'Exporting...' : '↓ Export ZIP'}
         </button>
       </div>
-
-      {showFeedback && (
-        <ExportFeedbackModal onClose={() => setShowFeedback(false)} />
-      )}
+      {showFeedback && <ExportFeedbackModal onClose={() => setShowFeedback(false)} />}
     </>
   )
 }

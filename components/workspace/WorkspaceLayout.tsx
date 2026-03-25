@@ -12,68 +12,51 @@ export default function WorkspaceLayout() {
   const [zoomIndex, setZoomIndex] = useState(DEFAULT_ZOOM_INDEX)
   const [showFeedback, setShowFeedback] = useState(false)
 
-  const handleZoomIn = () =>
-    setZoomIndex((i) => Math.min(i + 1, ZOOM_STEPS.length - 1))
-
-  const handleZoomOut = () =>
-    setZoomIndex((i) => Math.max(i - 1, 0))
-
+  const handleZoomIn = () => setZoomIndex((i) => Math.min(i + 1, ZOOM_STEPS.length - 1))
+  const handleZoomOut = () => setZoomIndex((i) => Math.max(i - 1, 0))
   const zoom = ZOOM_STEPS[zoomIndex]
 
   return (
-    <div className="h-screen flex flex-col bg-gray-950">
+    <div className="h-screen flex flex-col" style={{ background: '#EDE8E3' }}>
       {/* Header */}
-      <div className="h-14 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-6 shrink-0" style={{ borderBottomColor: '#285A71' }}>
+      <div className="h-14 flex items-center justify-between px-6 shrink-0 border-b"
+        style={{ background: '#fff', borderBottomColor: 'rgba(42,36,32,0.12)' }}>
         <div className="flex items-center gap-4">
-          <a
-            href="/"
-            className="text-gray-500 hover:text-gray-300 text-sm transition-colors"
-          >
+          <a href="/" className="text-sm transition-colors" style={{ color: '#6b5e56' }}
+            onMouseEnter={e => (e.currentTarget.style.color = '#2a2420')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#6b5e56')}>
             ← New chapter
           </a>
-          <span className="text-gray-700">|</span>
-          <span className="text-gray-200 text-sm font-semibold tracking-wide">
+          <span style={{ color: 'rgba(42,36,32,0.2)' }}>|</span>
+          <span className="text-sm font-semibold tracking-wide" style={{ color: '#2a2420' }}>
             Comic Translation Workspace
           </span>
         </div>
-
         <div className="flex items-center gap-3">
-          {/* Feedback button */}
-          <button
-            onClick={() => setShowFeedback(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium text-gray-400 border border-gray-700 hover:border-gray-500 hover:text-gray-200 transition-colors"
-          >
-            <span>💬</span>
-            Feedback
+          <button onClick={() => setShowFeedback(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors"
+            style={{ color: '#6b5e56', borderColor: 'rgba(42,36,32,0.15)', background: 'transparent' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = '#F2967E'; e.currentTarget.style.color = '#F2967E' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(42,36,32,0.15)'; e.currentTarget.style.color = '#6b5e56' }}>
+            <span>💬</span> Feedback
           </button>
-
           <ExportButton />
         </div>
       </div>
 
-      {/* Main area */}
+      {/* Main */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Canvas column */}
         <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-          <Toolbar
-            zoomIndex={zoomIndex}
-            onZoomIn={handleZoomIn}
-            onZoomOut={handleZoomOut}
-          />
+          <Toolbar zoomIndex={zoomIndex} onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
           <PageCanvas zoom={zoom} />
           <PageNavigator />
         </div>
-
-        {/* Translation panel */}
-        <div className="w-96 bg-gray-900 border-l flex flex-col shrink-0" style={{ borderLeftColor: '#285A71' }}>
+        <div className="w-96 flex flex-col shrink-0 border-l" style={{ background: '#fff', borderLeftColor: 'rgba(42,36,32,0.12)' }}>
           <TranslationPanel />
         </div>
       </div>
 
-      {/* Manual feedback modal */}
-      {showFeedback && (
-        <ExportFeedbackModal onClose={() => setShowFeedback(false)} />
-      )}
+      {showFeedback && <ExportFeedbackModal onClose={() => setShowFeedback(false)} />}
     </div>
   )
 }

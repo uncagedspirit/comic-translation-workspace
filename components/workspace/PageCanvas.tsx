@@ -8,11 +8,9 @@ import BubbleRect from './BubbleRect'
 import TextOverlay from './TextOverlay'
 
 const ZOOM_STEPS = [0.25, 0.33, 0.5, 0.67, 0.75, 1.0, 1.25, 1.5]
-const DEFAULT_ZOOM_INDEX = 2 // 0.5 = 50%
+const DEFAULT_ZOOM_INDEX = 2
 
-interface PageCanvasProps {
-  zoom: number
-}
+interface PageCanvasProps { zoom: number }
 
 export default function PageCanvas({ zoom }: PageCanvasProps) {
   const currentPage = useProjectStore((s) => s.getCurrentPage())
@@ -29,28 +27,21 @@ export default function PageCanvas({ zoom }: PageCanvasProps) {
   const stageRef = useRef<Konva.Stage>(null)
   const [image, setImage] = useState<HTMLImageElement | null>(null)
   const [imageSize, setImageSize] = useState({ width: 800, height: 600 })
-
   const [isDrawing, setIsDrawing] = useState(false)
   const [drawStart, setDrawStart] = useState({ x: 0, y: 0 })
-  const [drawRect, setDrawRect] = useState<{
-    x: number; y: number; width: number; height: number
-  } | null>(null)
+  const [drawRect, setDrawRect] = useState<{ x: number; y: number; width: number; height: number } | null>(null)
 
   useEffect(() => {
     if (!currentPage?.imageUrl) { setImage(null); return }
     const img = new window.Image()
     img.src = currentPage.imageUrl
-    img.onload = () => {
-      setImage(img)
-      setImageSize({ width: img.naturalWidth, height: img.naturalHeight })
-    }
+    img.onload = () => { setImage(img); setImageSize({ width: img.naturalWidth, height: img.naturalHeight }) }
   }, [currentPage?.imageUrl])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.key === 'Delete' || e.key === 'Backspace') && selectedBubbleId) {
-        if (document.activeElement?.tagName === 'TEXTAREA') return
-        if (document.activeElement?.tagName === 'INPUT') return
+        if (document.activeElement?.tagName === 'TEXTAREA' || document.activeElement?.tagName === 'INPUT') return
         deleteBubble(selectedBubbleId)
       }
       if (e.key === 'd' || e.key === 'D') setActiveTool('draw')
@@ -72,34 +63,21 @@ export default function PageCanvas({ zoom }: PageCanvasProps) {
   const handleMouseDown = () => {
     if (activeTool !== 'draw') return
     const pos = getPointerPos()
-    setIsDrawing(true)
-    setDrawStart(pos)
+    setIsDrawing(true); setDrawStart(pos)
     setDrawRect({ x: pos.x, y: pos.y, width: 0, height: 0 })
   }
 
   const handleMouseMove = () => {
     if (!isDrawing || activeTool !== 'draw') return
     const pos = getPointerPos()
-    setDrawRect({
-      x: Math.min(pos.x, drawStart.x),
-      y: Math.min(pos.y, drawStart.y),
-      width: Math.abs(pos.x - drawStart.x),
-      height: Math.abs(pos.y - drawStart.y),
-    })
+    setDrawRect({ x: Math.min(pos.x, drawStart.x), y: Math.min(pos.y, drawStart.y), width: Math.abs(pos.x - drawStart.x), height: Math.abs(pos.y - drawStart.y) })
   }
 
   const handleMouseUp = () => {
     if (!isDrawing || !drawRect) return
     setIsDrawing(false)
     if (drawRect.width > 10 && drawRect.height > 10) {
-      const id = addBubble(
-        currentPageIndex,
-        drawRect.x / zoom,
-        drawRect.y / zoom,
-        drawRect.width / zoom,
-        drawRect.height / zoom,
-        activeBubbleShape
-      )
+      const id = addBubble(currentPageIndex, drawRect.x / zoom, drawRect.y / zoom, drawRect.width / zoom, drawRect.height / zoom, activeBubbleShape)
       setSelectedBubble(id)
     }
     setDrawRect(null)
@@ -110,60 +88,30 @@ export default function PageCanvas({ zoom }: PageCanvasProps) {
   }
 
   if (!currentPage) {
-    return (
-      <div className="flex-1 flex items-center justify-center text-gray-600">
-        No page loaded
-      </div>
-    )
+    return <div className="flex-1 flex items-center justify-center" style={{ color: '#6b5e56' }}>No page loaded</div>
   }
 
   return (
-    <div
-      className="flex-1 overflow-auto bg-gray-950"
-      style={{ cursor: activeTool === 'draw' ? 'crosshair' : 'default' }}
-    >
-      <div
-        className="min-h-full flex items-start justify-center p-6"
-        style={{ minWidth: stageWidth + 48 }}
-      >
+    <div className="flex-1 overflow-auto" style={{ background: '#f0ebe6', cursor: activeTool === 'draw' ? 'crosshair' : 'default' }}>
+      <div className="min-h-full flex items-start justify-center p-6" style={{ minWidth: stageWidth + 48 }}>
         {image ? (
-          <Stage
-            ref={stageRef}
-            width={stageWidth}
-            height={stageHeight}
-            listening={true}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onClick={handleStageClick}
-            style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.6)' }}
-          >
+          <Stage ref={stageRef} width={stageWidth} height={stageHeight} listening={true}
+            onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onClick={handleStageClick}
+            style={{ boxShadow: '0 8px 32px rgba(42,36,32,0.15)', borderRadius: '12px' }}>
             <Layer>
               <KonvaImage image={image} width={stageWidth} height={stageHeight} />
             </Layer>
             <Layer>
-              {bubbles.map((bubble) => (
-                <BubbleRect key={bubble.id} bubble={bubble} scale={zoom} />
-              ))}
-              {bubbles.map((bubble) => (
-                <TextOverlay key={`text-${bubble.id}`} bubble={bubble} scale={zoom} />
-              ))}
+              {bubbles.map((bubble) => (<BubbleRect key={bubble.id} bubble={bubble} scale={zoom} />))}
+              {bubbles.map((bubble) => (<TextOverlay key={`text-${bubble.id}`} bubble={bubble} scale={zoom} />))}
               {isDrawing && drawRect && (
-                <Rect
-                  x={drawRect.x}
-                  y={drawRect.y}
-                  width={drawRect.width}
-                  height={drawRect.height}
-                  fill="rgba(40, 90, 113, 0.2)"
-                  stroke="#CFDA5A"
-                  strokeWidth={1.5}
-                  dash={[4, 4]}
-                />
+                <Rect x={drawRect.x} y={drawRect.y} width={drawRect.width} height={drawRect.height}
+                  fill="rgba(122, 182, 72, 0.15)" stroke="#7AB648" strokeWidth={1.5} dash={[4, 4]} cornerRadius={4} />
               )}
             </Layer>
           </Stage>
         ) : (
-          <div className="text-gray-600 text-sm mt-20">Loading page...</div>
+          <div className="text-sm mt-20" style={{ color: '#6b5e56' }}>Loading page...</div>
         )}
       </div>
     </div>

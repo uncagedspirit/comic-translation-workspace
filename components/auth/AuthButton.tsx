@@ -4,43 +4,32 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
-interface AuthButtonProps {
-  variant?: 'hero' | 'nav'
-}
+interface AuthButtonProps { variant?: 'hero' | 'nav' }
 
 export default function AuthButton({ variant = 'nav' }: AuthButtonProps) {
   const { data: session, status } = useSession()
   const [mounted, setMounted] = useState(false)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  useEffect(() => { setMounted(true) }, [])
 
   if (!mounted || status === 'loading') {
     if (variant === 'hero') return null
-    return <div className="h-9 w-20 bg-white/5 rounded" />
+    return <div className="h-9 w-20 rounded-lg" style={{ background: 'rgba(42,36,32,0.08)' }} />
   }
 
   if (session?.user) {
     return (
       <div className="flex items-center gap-3">
         {session.user.image && (
-          <Image
-            src={session.user.image}
-            alt={session.user.name ?? 'User'}
-            width={32}
-            height={32}
-            className="rounded-full border-2"
-            style={{ borderColor: '#285A71' }}
-          />
+          <Image src={session.user.image} alt={session.user.name ?? 'User'} width={32} height={32}
+            className="rounded-full border-2" style={{ borderColor: '#7AB648' }} />
         )}
-        <span className="text-sm text-gray-300 hidden md:block">
-          {session.user.name}
-        </span>
-        <button
-          onClick={() => signOut({ callbackUrl: '/' })}
-          className="text-xs text-gray-500 hover:text-gray-300 transition-colors border border-gray-700 hover:border-gray-500 px-3 py-1.5 rounded"
-        >
+        <span className="text-sm hidden md:block" style={{ color: '#6b5e56' }}>{session.user.name}</span>
+        <button onClick={() => signOut({ callbackUrl: '/' })}
+          className="text-xs px-3 py-1.5 rounded-lg border transition-colors"
+          style={{ color: '#6b5e56', borderColor: 'rgba(42,36,32,0.2)', background: 'transparent' }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = '#F2967E'; e.currentTarget.style.color = '#F2967E' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(42,36,32,0.2)'; e.currentTarget.style.color = '#6b5e56' }}>
           Sign out
         </button>
       </div>
@@ -48,13 +37,11 @@ export default function AuthButton({ variant = 'nav' }: AuthButtonProps) {
   }
 
   return (
-    <button
-      onClick={() => signIn('google')}
-      className="flex items-center gap-2 text-white text-sm font-medium px-4 py-2 rounded transition-colors border border-white/10 hover:border-white/20"
-      style={{ background: 'rgba(40,90,113,0.3)' }}
-      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(40,90,113,0.5)')}
-      onMouseLeave={e => (e.currentTarget.style.background = 'rgba(40,90,113,0.3)')}
-    >
+    <button onClick={() => signIn('google')}
+      className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border transition-all"
+      style={{ background: 'transparent', color: '#2a2420', borderColor: 'rgba(42,36,32,0.2)' }}
+      onMouseEnter={e => { e.currentTarget.style.background = '#7AB648'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = '#7AB648' }}
+      onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#2a2420'; e.currentTarget.style.borderColor = 'rgba(42,36,32,0.2)' }}>
       <GoogleIcon className="w-4 h-4" />
       Sign in
     </button>
