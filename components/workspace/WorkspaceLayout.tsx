@@ -23,7 +23,7 @@ export default function WorkspaceLayout() {
   return (
     <div className="h-screen flex flex-col bg-gray-950">
       {/* Header */}
-      <div className="h-14 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-6 shrink-0">
+      <div className="h-14 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-6 shrink-0" style={{ borderBottomColor: '#285A71' }}>
         <div className="flex items-center gap-4">
           <a
             href="/"
@@ -65,12 +65,12 @@ export default function WorkspaceLayout() {
         </div>
 
         {/* Translation panel */}
-        <div className="w-96 bg-gray-900 border-l border-gray-800 flex flex-col shrink-0">
+        <div className="w-96 bg-gray-900 border-l flex flex-col shrink-0" style={{ borderLeftColor: '#285A71' }}>
           <TranslationPanel />
         </div>
       </div>
 
-      {/* Manual feedback modal (from the button) */}
+      {/* Manual feedback modal */}
       {showFeedback && (
         <ExportFeedbackModal onClose={() => setShowFeedback(false)} />
       )}

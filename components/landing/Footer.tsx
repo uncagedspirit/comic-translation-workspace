@@ -6,9 +6,9 @@ export default function Footer() {
         <div className="flex items-center gap-3">
           <div
             className="w-6 h-6 flex items-center justify-center border border-white/30"
-            style={{ background: '#C84B31' }}
+            style={{ background: '#285A71' }}
           >
-            <svg width="10" height="10" viewBox="0 0 16 16" fill="white">
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="#CFDA5A">
               <rect x="1" y="1" width="6" height="6" />
               <rect x="9" y="1" width="6" height="6" />
               <rect x="1" y="9" width="14" height="6" />

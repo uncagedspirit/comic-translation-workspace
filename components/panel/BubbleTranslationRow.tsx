@@ -6,10 +6,10 @@ import { Bubble } from '@/lib/types'
 const PRESETS = [
   { color: '#ffffff', label: 'White' },
   { color: '#fffde7', label: 'Cream' },
+  { color: '#FCE4C0', label: 'Warm Cream' },
   { color: '#e3f2fd', label: 'Ice Blue' },
   { color: '#fce4ec', label: 'Blush' },
   { color: '#f3e5f5', label: 'Lavender' },
-  { color: '#e8f5e9', label: 'Mint' },
   { color: '#000000', label: 'Black' },
 ]
 
@@ -41,18 +41,17 @@ export default function BubbleTranslationRow({ bubble, index }: BubbleTranslatio
 
   return (
     <div
-      className={`
-        p-3 rounded-lg border transition-colors cursor-pointer
-        ${isSelected
-          ? 'border-indigo-500 bg-indigo-950/40'
-          : 'border-gray-700 bg-gray-800/40 hover:border-gray-600'}
-      `}
+      className={`p-3 rounded-lg border transition-colors cursor-pointer`}
+      style={isSelected
+        ? { borderColor: '#CFDA5A', background: 'rgba(40,90,113,0.2)' }
+        : { borderColor: '#374151', background: 'rgba(31,41,55,0.4)' }
+      }
       onClick={() => setSelectedBubble(bubble.id)}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs font-medium text-gray-400">Bubble {index + 1}</span>
-        {!bubble.translation && <span className="text-xs text-amber-500/70">empty</span>}
+        {!bubble.translation && <span className="text-xs" style={{ color: '#FCE4C0', opacity: 0.7 }}>empty</span>}
         {bubble.translation  && <span className="text-xs text-green-500/70">✓</span>}
       </div>
 
@@ -63,14 +62,11 @@ export default function BubbleTranslationRow({ bubble, index }: BubbleTranslatio
         onClick={(e) => { e.stopPropagation(); setSelectedBubble(bubble.id) }}
         placeholder="Type translation here..."
         rows={3}
-        className={`
-          w-full bg-gray-900 text-gray-100 text-sm rounded px-2 py-1.5
-          border transition-colors resize-none outline-none
-          placeholder:text-gray-600 mb-2
-          ${isSelected
-            ? 'border-indigo-500/50 focus:border-indigo-400'
-            : 'border-gray-700 focus:border-gray-500'}
-        `}
+        className={`w-full bg-gray-900 text-gray-100 text-sm rounded px-2 py-1.5 border transition-colors resize-none outline-none placeholder:text-gray-600 mb-2`}
+        style={isSelected
+          ? { borderColor: 'rgba(207,218,90,0.5)' }
+          : { borderColor: '#374151' }
+        }
       />
 
       {/* ── Fill colour picker ── */}
@@ -88,13 +84,13 @@ export default function BubbleTranslationRow({ bubble, index }: BubbleTranslatio
             className="w-4 h-4 rounded-full border transition-transform hover:scale-110 shrink-0"
             style={{
               background:  color,
-              borderColor: bgColor === color ? '#818cf8' : 'rgba(255,255,255,0.2)',
-              boxShadow:   bgColor === color ? '0 0 0 1.5px #818cf8' : 'none',
+              borderColor: bgColor === color ? '#CFDA5A' : 'rgba(255,255,255,0.2)',
+              boxShadow:   bgColor === color ? '0 0 0 1.5px #CFDA5A' : 'none',
             }}
           />
         ))}
 
-        {/* Colour wheel — custom */}
+        {/* Colour wheel */}
         <label
           title="Custom color"
           className="w-4 h-4 rounded-full border border-white/20 overflow-hidden cursor-pointer shrink-0 relative hover:scale-110 transition-transform"
@@ -131,13 +127,11 @@ export default function BubbleTranslationRow({ bubble, index }: BubbleTranslatio
             key={f.name}
             title={f.name}
             onClick={() => updateBubble(bubble.id, { fontFamily: f.name })}
-            className={`
-              px-1.5 py-0.5 rounded text-[11px] leading-snug transition-colors border shrink-0
-              ${fontFamily === f.name
-                ? 'border-indigo-400 bg-indigo-900/50 text-indigo-200'
-                : 'border-gray-700 bg-gray-800 text-gray-400 hover:border-gray-500 hover:text-gray-200'}
-            `}
-            style={{ fontFamily: f.name }}
+            className={`px-1.5 py-0.5 rounded text-[11px] leading-snug transition-colors border shrink-0`}
+            style={fontFamily === f.name
+              ? { borderColor: '#CFDA5A', background: 'rgba(40,90,113,0.5)', color: '#FCE4C0', fontFamily: f.name }
+              : { borderColor: '#374151', background: '#1f2937', color: '#9ca3af', fontFamily: f.name }
+            }
           >
             {f.label}
           </button>

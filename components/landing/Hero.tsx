@@ -41,8 +41,8 @@ export default function Hero() {
         }}
       />
 
-      {/* Bengara radial glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(200,75,49,0.15)_0%,transparent_65%)]" />
+      {/* Teal radial glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(40,90,113,0.25)_0%,transparent_65%)]" />
 
       {/* Floating impact words */}
       <div
@@ -53,8 +53,8 @@ export default function Hero() {
           transform: 'rotate(-14deg)',
           opacity: 0.15,
           letterSpacing: '0.06em',
-          color: '#C84B31',
-          WebkitTextStroke: '2px #C84B31',
+          color: '#285A71',
+          WebkitTextStroke: '2px #285A71',
         }}
       >
         ZOOM!
@@ -79,7 +79,7 @@ export default function Hero() {
           transform: 'rotate(-6deg)',
           opacity: 0.11,
           letterSpacing: '0.04em',
-          color: '#C84B31',
+          color: '#CFDA5A',
         }}
       >
         WHAM!
@@ -100,28 +100,28 @@ export default function Hero() {
       {/* Main content */}
       <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
 
-        {/* Open Beta badge — prominent, above headline */}
+        {/* Open Beta badge */}
         <div className="flex justify-center mb-10">
           <div
             className="inline-flex items-center gap-3 px-5 py-2.5"
             style={{
-              background: 'rgba(200, 75, 49, 0.12)',
-              border: '1.5px solid rgba(200, 75, 49, 0.5)',
+              background: 'rgba(40,90,113,0.18)',
+              border: '1.5px solid rgba(40,90,113,0.6)',
             }}
           >
             <span
               className="w-2 h-2 rounded-full shrink-0 animate-pulse"
-              style={{ background: '#C84B31' }}
+              style={{ background: '#CFDA5A' }}
             />
             <span
               className="text-sm font-black tracking-[0.22em] uppercase"
-              style={{ color: '#C84B31' }}
+              style={{ color: '#CFDA5A' }}
             >
               Open Beta
             </span>
             <span
               className="h-3.5 w-px opacity-40"
-              style={{ background: '#C84B31' }}
+              style={{ background: '#CFDA5A' }}
             />
             <span className="text-sm font-medium text-white/60 tracking-wide">
               Free to Use
@@ -140,7 +140,7 @@ export default function Hero() {
         >
           TRANSLATE
           <br />
-          <span style={{ color: '#C84B31', WebkitTextStroke: '2px white' }}>
+          <span style={{ color: '#CFDA5A', WebkitTextStroke: '2px white' }}>
             MANGA
           </span>
           <br />
@@ -155,7 +155,7 @@ export default function Hero() {
                 {f}
               </span>
               {i < 4 && (
-                <span className="text-lg font-black" style={{ color: '#C84B31' }}>·</span>
+                <span className="text-lg font-black" style={{ color: '#285A71' }}>·</span>
               )}
             </span>
           ))}
@@ -177,7 +177,7 @@ export default function Hero() {
                 style={{
                   fontFamily: 'var(--font-bangers)',
                   letterSpacing: '0.08em',
-                  boxShadow: '6px 6px 0 #C84B31',
+                  boxShadow: '6px 6px 0 #285A71',
                 }}
               >
                 SIGN IN TO START
@@ -187,12 +187,12 @@ export default function Hero() {
             {session ? (
               <button
                 onClick={() => setShowUploader(true)}
-                className="text-white font-black text-xl px-12 py-5 border-4 border-white transition-all duration-150"
+                className="text-[#0a0a0a] font-black text-xl px-12 py-5 border-4 border-white transition-all duration-150"
                 style={{
                   fontFamily: 'var(--font-bangers)',
                   letterSpacing: '0.12em',
-                  background: '#C84B31',
-                  boxShadow: '6px 6px 0 white',
+                  background: '#CFDA5A',
+                  boxShadow: '6px 6px 0 #285A71',
                 }}
               >
                 START TRANSLATING ▶
@@ -204,7 +204,7 @@ export default function Hero() {
                 style={{
                   fontFamily: 'var(--font-bangers)',
                   letterSpacing: '0.08em',
-                  boxShadow: '6px 6px 0 #C84B31',
+                  boxShadow: '6px 6px 0 #285A71',
                 }}
               >
                 <svg className="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="none">
@@ -236,7 +236,7 @@ export default function Hero() {
         >
           <div
             className="bg-[#111] border-4 border-white p-8 w-full max-w-xl"
-            style={{ boxShadow: '12px 12px 0 #C84B31' }}
+            style={{ boxShadow: '12px 12px 0 #285A71' }}
           >
             <div className="flex items-center justify-between mb-6">
               <h2

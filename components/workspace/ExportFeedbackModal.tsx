@@ -51,14 +51,14 @@ export default function ExportFeedbackModal({ onClose }: ExportFeedbackModalProp
     >
       <div
         className="bg-[#111] border-4 border-white w-full max-w-lg relative"
-        style={{ boxShadow: '10px 10px 0 #C84B31' }}
+        style={{ boxShadow: '10px 10px 0 #285A71' }}
       >
         {/* Header */}
         <div
           className="border-b-4 border-white px-6 py-5"
-          style={{ background: '#C84B31' }}
+          style={{ background: '#285A71' }}
         >
-          <p className="text-xs font-black tracking-[0.25em] uppercase text-white/70 mb-1">
+          <p className="text-xs font-black tracking-[0.25em] uppercase mb-1" style={{ color: '#CFDA5A' }}>
             Chapter exported! 🎉
           </p>
           <h2
@@ -67,7 +67,7 @@ export default function ExportFeedbackModal({ onClose }: ExportFeedbackModalProp
           >
             HOW WAS YOUR EXPERIENCE?
           </h2>
-          <p className="text-sm text-white/70 mt-1">
+          <p className="text-sm mt-1" style={{ color: '#FCE4C0', opacity: 0.8 }}>
             You just exported your first chapter — we&apos;d love to know what you think.
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function ExportFeedbackModal({ onClose }: ExportFeedbackModalProp
             <div className="flex flex-col items-center text-center gap-5 py-6">
               <div
                 className="w-16 h-16 flex items-center justify-center text-3xl border-4 border-white"
-                style={{ background: '#C84B31', boxShadow: '4px 4px 0 white' }}
+                style={{ background: '#285A71', boxShadow: '4px 4px 0 #CFDA5A' }}
               >
                 ✓
               </div>
@@ -121,14 +121,16 @@ export default function ExportFeedbackModal({ onClose }: ExportFeedbackModalProp
                   placeholder={session?.user?.name ?? 'Your name'}
                   value={resolvedName}
                   onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
-                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 focus:border-[#C84B31] px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-700"
+                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-700"
+                  onFocus={e => e.target.style.borderColor = '#285A71'}
+                  onBlur={e => e.target.style.borderColor = ''}
                 />
               </div>
 
               {/* Email */}
               <div>
                 <label className="block text-xs font-black tracking-widest uppercase text-gray-500 mb-1.5">
-                  Email <span className="text-[#C84B31]">*</span>
+                  Email <span style={{ color: '#CFDA5A' }}>*</span>
                 </label>
                 <input
                   type="email"
@@ -136,7 +138,9 @@ export default function ExportFeedbackModal({ onClose }: ExportFeedbackModalProp
                   placeholder={session?.user?.email ?? 'you@example.com'}
                   value={resolvedEmail}
                   onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
-                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 focus:border-[#C84B31] px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-700"
+                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-700"
+                  onFocus={e => e.target.style.borderColor = '#285A71'}
+                  onBlur={e => e.target.style.borderColor = ''}
                 />
               </div>
 
@@ -172,7 +176,7 @@ export default function ExportFeedbackModal({ onClose }: ExportFeedbackModalProp
               {/* Message */}
               <div>
                 <label className="block text-xs font-black tracking-widest uppercase text-gray-500 mb-1.5">
-                  Message <span className="text-[#C84B31]">*</span>
+                  Message <span style={{ color: '#CFDA5A' }}>*</span>
                 </label>
                 <textarea
                   required
@@ -180,12 +184,14 @@ export default function ExportFeedbackModal({ onClose }: ExportFeedbackModalProp
                   placeholder="What worked well? What was confusing? Any features you wish existed?"
                   value={form.message}
                   onChange={(e) => setForm((p) => ({ ...p, message: e.target.value }))}
-                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 focus:border-[#C84B31] px-4 py-2.5 text-sm outline-none resize-none transition-colors placeholder:text-gray-700"
+                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 px-4 py-2.5 text-sm outline-none resize-none transition-colors placeholder:text-gray-700"
+                  onFocus={e => e.target.style.borderColor = '#285A71'}
+                  onBlur={e => e.target.style.borderColor = ''}
                 />
               </div>
 
               {errorMsg && (
-                <p className="text-[#C84B31] text-sm border border-[#C84B31]/40 bg-[#C84B31]/10 px-3 py-2">
+                <p className="text-sm border px-3 py-2" style={{ color: '#CFDA5A', borderColor: 'rgba(207,218,90,0.4)', background: 'rgba(207,218,90,0.1)' }}>
                   {errorMsg}
                 </p>
               )}
@@ -194,8 +200,8 @@ export default function ExportFeedbackModal({ onClose }: ExportFeedbackModalProp
                 <button
                   type="submit"
                   disabled={status === 'loading'}
-                  className="flex-1 bg-[#C84B31] disabled:opacity-50 text-white font-black text-base py-3 border-2 border-white hover:bg-white hover:text-[#C84B31] transition-all duration-150 shadow-[4px_4px_0_white] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5"
-                  style={{ fontFamily: 'var(--font-bangers)', letterSpacing: '0.1em' }}
+                  className="flex-1 disabled:opacity-50 text-[#0a0a0a] font-black text-base py-3 border-2 border-white transition-all duration-150 hover:bg-white hover:text-[#285A71] shadow-[4px_4px_0_white] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5"
+                  style={{ fontFamily: 'var(--font-bangers)', letterSpacing: '0.1em', background: '#CFDA5A' }}
                 >
                   {status === 'loading' ? 'SENDING...' : 'SEND FEEDBACK ▶'}
                 </button>

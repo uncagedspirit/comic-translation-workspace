@@ -62,9 +62,9 @@ export default function InteractiveDemo() {
   return (
     <section id="demo" className="border-b-[3px] border-white">
       {/* Section header */}
-      <div className="border-b-[3px] border-white px-6 py-6 flex items-center justify-between bg-[#C84B31]">
+      <div className="border-b-[3px] border-white px-6 py-6 flex items-center justify-between" style={{ background: '#285A71' }}>
         <div>
-          <p className="text-xs font-black tracking-[0.3em] uppercase text-white/60 mb-1">Chapter 2</p>
+          <p className="text-xs font-black tracking-[0.3em] uppercase mb-1" style={{ color: '#CFDA5A' }}>Chapter 2</p>
           <h2
             className="text-5xl md:text-6xl text-white"
             style={{ fontFamily: 'var(--font-bangers)', letterSpacing: '0.06em' }}
@@ -114,9 +114,10 @@ export default function InteractiveDemo() {
                   onClick={() => setActiveTool('select')}
                   className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
                     activeTool === 'select'
-                      ? 'bg-indigo-600 text-white'
+                      ? 'text-[#0a0a0a]'
                       : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'
                   }`}
+                  style={activeTool === 'select' ? { background: '#CFDA5A' } : {}}
                 >
                   ↖ Select Bubble
                 </button>
@@ -124,9 +125,10 @@ export default function InteractiveDemo() {
                   onClick={() => setActiveTool('draw')}
                   className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
                     activeTool === 'draw'
-                      ? 'bg-indigo-600 text-white'
+                      ? 'text-[#0a0a0a]'
                       : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'
                   }`}
+                  style={activeTool === 'draw' ? { background: '#CFDA5A' } : {}}
                 >
                   ▭ Draw Bubble
                 </button>
@@ -137,9 +139,10 @@ export default function InteractiveDemo() {
                   onClick={() => setActiveBubbleShape('rect')}
                   className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
                     activeBubbleShape === 'rect'
-                      ? 'bg-indigo-600 text-white'
+                      ? 'text-[#0a0a0a]'
                       : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'
                   }`}
+                  style={activeBubbleShape === 'rect' ? { background: '#CFDA5A' } : {}}
                 >
                   ▭ Rect
                 </button>
@@ -147,9 +150,10 @@ export default function InteractiveDemo() {
                   onClick={() => setActiveBubbleShape('ellipse')}
                   className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
                     activeBubbleShape === 'ellipse'
-                      ? 'bg-indigo-600 text-white'
+                      ? 'text-[#0a0a0a]'
                       : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'
                   }`}
+                  style={activeBubbleShape === 'ellipse' ? { background: '#CFDA5A' } : {}}
                 >
                   ◯ Oval
                 </button>
@@ -173,28 +177,28 @@ export default function InteractiveDemo() {
                 </span>
               </div>
 
-              {/* Canvas scroll area — overflows to allow full image height */}
+              {/* Canvas scroll area */}
               <div
                 className="flex-1 overflow-auto bg-[#030712] flex items-start justify-center p-6 relative"
                 style={{ cursor: activeTool === 'draw' ? 'crosshair' : 'default' }}
               >
-                {/* Floating hint pinned to left edge */}
+                {/* Floating hint */}
                 {bubbles.length === 0 && activeTool === 'select' && (
                   <div className="sticky left-0 top-8 z-10 pointer-events-none shrink-0 self-start">
                     <div className="bg-black/80 text-white text-xs px-3 py-2.5 rounded-r-lg leading-relaxed border-y border-r border-gray-700" style={{ maxWidth: '130px' }}>
-                      Click <span className="text-indigo-400 font-bold">▭ Draw Bubble</span> in the toolbar, then drag on the page
+                      Click <span className="font-bold" style={{ color: '#CFDA5A' }}>▭ Draw Bubble</span> in the toolbar, then drag on the page
                     </div>
                   </div>
                 )}
                 {activeTool === 'draw' && bubbles.length === 0 && (
                   <div className="sticky left-0 top-8 z-10 pointer-events-none shrink-0 self-start">
-                    <div className="bg-indigo-900/90 text-indigo-200 text-xs px-3 py-2.5 rounded-r-lg animate-pulse border-y border-r border-indigo-700" style={{ maxWidth: '130px' }}>
+                    <div className="text-xs px-3 py-2.5 rounded-r-lg animate-pulse border-y border-r" style={{ background: 'rgba(40,90,113,0.9)', color: '#FCE4C0', borderColor: '#285A71', maxWidth: '130px' }}>
                       Click &amp; drag anywhere on the page
                     </div>
                   </div>
                 )}
 
-                {/* Page container — width fixed, height auto so image is never cropped */}
+                {/* Page container */}
                 <div
                   ref={canvasRef}
                   className="relative shrink-0 select-none"
@@ -207,7 +211,6 @@ export default function InteractiveDemo() {
                   onMouseUp={onMouseUp}
                   onMouseLeave={() => { if (drawing) { setDrawing(false); setPreview(null) } }}
                 >
-                  {/* Full image — natural height, never cropped */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/test.jpg"
@@ -234,8 +237,8 @@ export default function InteractiveDemo() {
                           left: b.x, top: b.y, width: b.w, height: b.h,
                           border: '2px solid',
                           borderRadius: isEllipse ? '50%' : '3px',
-                          borderColor: isSelected ? '#818cf8' : 'rgba(99,102,241,0.6)',
-                          background: isSelected ? 'rgba(67,56,202,0.18)' : 'rgba(67,56,202,0.06)',
+                          borderColor: isSelected ? '#CFDA5A' : 'rgba(207,218,90,0.6)',
+                          background: isSelected ? 'rgba(40,90,113,0.18)' : 'rgba(40,90,113,0.06)',
                         }}
                         onClick={() => { setSelectedId(b.id); setActiveTool('select') }}
                       >
@@ -253,7 +256,7 @@ export default function InteractiveDemo() {
                             {b.text}
                           </span>
                         ) : (
-                          <span className="text-indigo-400/50 text-xs pointer-events-none">click to type</span>
+                          <span style={{ color: 'rgba(207,218,90,0.5)' }} className="text-xs pointer-events-none">click to type</span>
                         )}
                       </div>
                     )
@@ -262,11 +265,13 @@ export default function InteractiveDemo() {
                   {/* Draw preview */}
                   {preview && preview.w > 4 && (
                     <div
-                      className="absolute border-2 border-dashed border-indigo-400 bg-indigo-950/20 pointer-events-none"
+                      className="absolute border-2 border-dashed pointer-events-none"
                       style={{
                         left: preview.x, top: preview.y,
                         width: preview.w, height: preview.h,
                         borderRadius: activeBubbleShape === 'ellipse' ? '50%' : '3px',
+                        borderColor: '#CFDA5A',
+                        background: 'rgba(40,90,113,0.2)',
                       }}
                     />
                   )}
@@ -281,8 +286,9 @@ export default function InteractiveDemo() {
                     <div
                       key={i}
                       className={`shrink-0 w-10 h-14 rounded overflow-hidden border-2 transition-colors ${
-                        active ? 'border-indigo-400' : 'border-gray-700 opacity-40 cursor-default'
+                        active ? 'opacity-100' : 'border-gray-700 opacity-40 cursor-default'
                       }`}
+                      style={active ? { borderColor: '#CFDA5A' } : {}}
                     >
                       <div
                         className="w-full h-full"
@@ -314,7 +320,8 @@ export default function InteractiveDemo() {
                     <p className="text-gray-500 text-sm">No bubbles on this page yet.</p>
                     <button
                       onClick={() => setActiveTool('draw')}
-                      className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+                      className="text-xs transition-colors hover:opacity-80"
+                      style={{ color: '#CFDA5A' }}
                     >
                       Switch to Draw mode →
                     </button>
@@ -324,15 +331,15 @@ export default function InteractiveDemo() {
                     <div
                       key={b.id}
                       onClick={() => setSelectedId(b.id)}
-                      className={`p-3 rounded-lg border transition-colors cursor-pointer ${
-                        b.id === selectedId
-                          ? 'border-indigo-500 bg-indigo-950/40'
-                          : 'border-gray-700 bg-gray-800/40 hover:border-gray-600'
-                      }`}
+                      className={`p-3 rounded-lg border transition-colors cursor-pointer`}
+                      style={b.id === selectedId
+                        ? { borderColor: '#CFDA5A', background: 'rgba(40,90,113,0.2)' }
+                        : { borderColor: '#374151', background: 'rgba(31,41,55,0.4)' }
+                      }
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs font-medium text-gray-400">Bubble {i + 1}</span>
-                        {!b.text && <span className="text-xs text-amber-500/70">empty</span>}
+                        {!b.text && <span className="text-xs" style={{ color: '#FCE4C0', opacity: 0.7 }}>empty</span>}
                         {b.text && <span className="text-xs text-green-500/70">✓</span>}
                       </div>
                       <textarea
@@ -348,7 +355,8 @@ export default function InteractiveDemo() {
                         }}
                         placeholder="Type translation here..."
                         rows={3}
-                        className="w-full bg-gray-900 text-gray-100 text-sm rounded px-2 py-1.5 border border-gray-700 focus:border-indigo-500/50 outline-none resize-none placeholder:text-gray-600 transition-colors"
+                        className="w-full bg-gray-900 text-gray-100 text-sm rounded px-2 py-1.5 border border-gray-700 outline-none resize-none placeholder:text-gray-600 transition-colors"
+                        style={b.id === selectedId ? { borderColor: 'rgba(207,218,90,0.5)' } : {}}
                       />
                     </div>
                   ))

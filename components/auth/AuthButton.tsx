@@ -30,7 +30,8 @@ export default function AuthButton({ variant = 'nav' }: AuthButtonProps) {
             alt={session.user.name ?? 'User'}
             width={32}
             height={32}
-            className="rounded-full border-2 border-[#C84B31]"
+            className="rounded-full border-2"
+            style={{ borderColor: '#285A71' }}
           />
         )}
         <span className="text-sm text-gray-300 hidden md:block">
@@ -49,7 +50,10 @@ export default function AuthButton({ variant = 'nav' }: AuthButtonProps) {
   return (
     <button
       onClick={() => signIn('google')}
-      className="flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white text-sm font-medium px-4 py-2 rounded transition-colors border border-white/10 hover:border-white/20"
+      className="flex items-center gap-2 text-white text-sm font-medium px-4 py-2 rounded transition-colors border border-white/10 hover:border-white/20"
+      style={{ background: 'rgba(40,90,113,0.3)' }}
+      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(40,90,113,0.5)')}
+      onMouseLeave={e => (e.currentTarget.style.background = 'rgba(40,90,113,0.3)')}
     >
       <GoogleIcon className="w-4 h-4" />
       Sign in

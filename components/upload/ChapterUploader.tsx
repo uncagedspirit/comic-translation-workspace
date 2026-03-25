@@ -34,7 +34,6 @@ export default function ChapterUploader() {
 
       setError(null)
 
-      // Sort files by name so pages are in order
       const sorted = fileArray.sort((a, b) => a.name.localeCompare(b.name))
       const imageUrls = sorted.map((f) => URL.createObjectURL(f))
       const projectName = sorted[0].name.replace(/\.[^/.]+$/, '') + ' (chapter)'
@@ -66,14 +65,13 @@ export default function ChapterUploader() {
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
-        className={`
-          w-full border-2 border-dashed rounded-2xl p-16
-          flex flex-col items-center justify-center gap-4 cursor-pointer
-          transition-colors duration-150
-          ${isDragging
-            ? 'border-indigo-400 bg-indigo-950/40'
-            : 'border-gray-600 hover:border-indigo-500 hover:bg-gray-900'}
-        `}
+        className="w-full border-2 border-dashed rounded-2xl p-16 flex flex-col items-center justify-center gap-4 cursor-pointer transition-colors duration-150"
+        style={isDragging
+          ? { borderColor: '#CFDA5A', background: 'rgba(40,90,113,0.2)' }
+          : { borderColor: '#4b5563' }
+        }
+        onMouseEnter={e => { if (!isDragging) e.currentTarget.style.borderColor = '#285A71' }}
+        onMouseLeave={e => { if (!isDragging) e.currentTarget.style.borderColor = '#4b5563' }}
         onClick={() => document.getElementById('file-input')?.click()}
       >
         <div className="text-5xl">📂</div>
@@ -85,7 +83,12 @@ export default function ChapterUploader() {
             JPG, PNG, or WebP — up to 50 pages
           </p>
         </div>
-        <button className="mt-2 px-6 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-sm font-medium transition-colors">
+        <button
+          className="mt-2 px-6 py-2 rounded-lg text-sm font-medium transition-colors text-[#0a0a0a]"
+          style={{ background: '#CFDA5A' }}
+          onMouseEnter={e => (e.currentTarget.style.background = '#b8c24a')}
+          onMouseLeave={e => (e.currentTarget.style.background = '#CFDA5A')}
+        >
           Browse files
         </button>
       </div>

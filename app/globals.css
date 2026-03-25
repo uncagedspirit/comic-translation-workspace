@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  /* American Retro Palette */
+  --primary:     #285A71;
+  --primary-dark: #1d4155;
+  --primary-light: #336b87;
+  --accent:      #CFDA5A;
+  --accent-dark: #b8c24a;
+  --cream:       #FCE4C0;
+  --cream-dark:  #f0d0a0;
 }
 
 @theme inline {
@@ -10,13 +19,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

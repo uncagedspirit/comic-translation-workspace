@@ -39,9 +39,9 @@ export default function HowItWorks() {
       {/* Section header */}
       <div
         className="border-b-[3px] border-white px-6 py-6"
-        style={{ background: '#C84B31' }}
+        style={{ background: '#285A71' }}
       >
-        <p className="text-xs font-black tracking-[0.3em] uppercase text-white/60 mb-1">Chapter 1</p>
+        <p className="text-xs font-black tracking-[0.3em] uppercase mb-1" style={{ color: '#CFDA5A' }}>Chapter 1</p>
         <h2
           className="text-5xl md:text-6xl text-white"
           style={{ fontFamily: 'var(--font-bangers)', letterSpacing: '0.06em' }}
@@ -63,7 +63,7 @@ export default function HowItWorks() {
                 className="text-6xl leading-none opacity-20 group-hover:opacity-40 transition-opacity"
                 style={{
                   fontFamily: 'var(--font-bangers)',
-                  color: step.accent ? '#C84B31' : '#ffffff',
+                  color: step.accent ? '#CFDA5A' : '#FCE4C0',
                 }}
               >
                 {step.number}
@@ -75,8 +75,8 @@ export default function HowItWorks() {
             <div
               className="inline-block px-2 py-0.5 text-xs font-black tracking-[0.25em] border-2 self-start"
               style={{
-                borderColor: step.accent ? '#C84B31' : '#ffffff',
-                color: step.accent ? '#C84B31' : '#ffffff',
+                borderColor: step.accent ? '#CFDA5A' : '#FCE4C0',
+                color: step.accent ? '#CFDA5A' : '#FCE4C0',
               }}
             >
               {step.verb}

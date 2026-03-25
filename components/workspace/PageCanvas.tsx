@@ -154,8 +154,8 @@ export default function PageCanvas({ zoom }: PageCanvasProps) {
                   y={drawRect.y}
                   width={drawRect.width}
                   height={drawRect.height}
-                  fill="rgba(99, 102, 241, 0.2)"
-                  stroke="#818cf8"
+                  fill="rgba(40, 90, 113, 0.2)"
+                  stroke="#CFDA5A"
                   strokeWidth={1.5}
                   dash={[4, 4]}
                 />

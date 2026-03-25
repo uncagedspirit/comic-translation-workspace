@@ -11,7 +11,6 @@ export default function FeedbackSection() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
-  // Pre-fill from session
   const name = form.name || session?.user?.name || ''
   const email = form.email || session?.user?.email || ''
 
@@ -40,7 +39,7 @@ export default function FeedbackSection() {
     <section id="feedback" className="border-b-[3px] border-white">
       {/* Header */}
       <div className="border-b-[3px] border-white px-6 py-6 bg-[#111]">
-        <p className="text-xs font-black tracking-[0.3em] uppercase text-gray-600 mb-1">Chapter 3</p>
+        <p className="text-xs font-black tracking-[0.3em] uppercase mb-1" style={{ color: '#CFDA5A' }}>Chapter 3</p>
         <h2 className="text-5xl md:text-6xl text-white" style={{ fontFamily: 'var(--font-bangers)', letterSpacing: '0.06em' }}>
           TELL US WHAT YOU THINK
         </h2>
@@ -71,8 +70,8 @@ export default function FeedbackSection() {
             </div>
           </div>
           {/* Beta badge */}
-          <div className="border-2 border-[#e11d1d] p-4 inline-block">
-            <p className="text-[#e11d1d] text-xs font-black tracking-widest uppercase mb-1">Currently in Beta</p>
+          <div className="border-2 p-4 inline-block" style={{ borderColor: '#285A71' }}>
+            <p className="text-xs font-black tracking-widest uppercase mb-1" style={{ color: '#CFDA5A' }}>Currently in Beta</p>
             <p className="text-gray-400 text-sm">No payment, no waitlist. Sign in and start translating right now.</p>
           </div>
         </div>
@@ -81,7 +80,7 @@ export default function FeedbackSection() {
         <div className="p-8 md:p-12">
           {status === 'success' ? (
             <div className="flex flex-col items-center justify-center h-full text-center gap-6 py-12">
-              <div className="w-20 h-20 bg-[#e11d1d] border-4 border-white flex items-center justify-center text-4xl shadow-[6px_6px_0_white]">
+              <div className="w-20 h-20 border-4 border-white flex items-center justify-center text-4xl shadow-[6px_6px_0_white]" style={{ background: '#285A71' }}>
                 ✓
               </div>
               <div>
@@ -105,20 +104,27 @@ export default function FeedbackSection() {
                   placeholder={session?.user?.name ?? 'Tanjiro Kamado'}
                   value={form.name || session?.user?.name || ''}
                   onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 focus:border-[#e11d1d] px-4 py-3 text-sm outline-none transition-colors placeholder:text-gray-700"
+                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 px-4 py-3 text-sm outline-none transition-colors placeholder:text-gray-700"
+                  style={{ '--tw-ring-color': '#285A71' } as React.CSSProperties}
+                  onFocus={e => e.target.style.borderColor = '#285A71'}
+                  onBlur={e => e.target.style.borderColor = ''}
                 />
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-xs font-black tracking-widest uppercase text-gray-500 mb-2">Email <span className="text-[#e11d1d]">*</span></label>
+                <label className="block text-xs font-black tracking-widest uppercase text-gray-500 mb-2">
+                  Email <span style={{ color: '#CFDA5A' }}>*</span>
+                </label>
                 <input
                   type="email"
                   required
                   placeholder={session?.user?.email ?? 'you@example.com'}
                   value={form.email || session?.user?.email || ''}
                   onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 focus:border-[#e11d1d] px-4 py-3 text-sm outline-none transition-colors placeholder:text-gray-700"
+                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 px-4 py-3 text-sm outline-none transition-colors placeholder:text-gray-700"
+                  onFocus={e => e.target.style.borderColor = '#285A71'}
+                  onBlur={e => e.target.style.borderColor = ''}
                 />
               </div>
 
@@ -143,26 +149,30 @@ export default function FeedbackSection() {
 
               {/* Message */}
               <div>
-                <label className="block text-xs font-black tracking-widest uppercase text-gray-500 mb-2">Message <span className="text-[#e11d1d]">*</span></label>
+                <label className="block text-xs font-black tracking-widest uppercase text-gray-500 mb-2">
+                  Message <span style={{ color: '#CFDA5A' }}>*</span>
+                </label>
                 <textarea
                   required
                   rows={5}
                   placeholder="What do you think? What's missing? What's great?"
                   value={form.message}
                   onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
-                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 focus:border-[#e11d1d] px-4 py-3 text-sm outline-none resize-none transition-colors placeholder:text-gray-700"
+                  className="w-full bg-[#0a0a0a] text-white border-2 border-gray-700 px-4 py-3 text-sm outline-none resize-none transition-colors placeholder:text-gray-700"
+                  onFocus={e => e.target.style.borderColor = '#285A71'}
+                  onBlur={e => e.target.style.borderColor = ''}
                 />
               </div>
 
               {errorMsg && (
-                <p className="text-[#e11d1d] text-sm border border-[#e11d1d]/40 bg-[#e11d1d]/10 px-3 py-2">{errorMsg}</p>
+                <p className="text-sm border px-3 py-2" style={{ color: '#CFDA5A', borderColor: 'rgba(207,218,90,0.4)', background: 'rgba(207,218,90,0.1)' }}>{errorMsg}</p>
               )}
 
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="w-full bg-[#e11d1d] disabled:opacity-50 text-white font-black text-lg py-4 border-2 border-white hover:bg-white hover:text-[#e11d1d] transition-all duration-150 shadow-[4px_4px_0_white] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
-                style={{ fontFamily: 'var(--font-bangers)', letterSpacing: '0.12em' }}
+                className="w-full disabled:opacity-50 text-[#0a0a0a] font-black text-lg py-4 border-2 border-white transition-all duration-150 hover:bg-white hover:text-[#285A71] shadow-[4px_4px_0_white] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
+                style={{ fontFamily: 'var(--font-bangers)', letterSpacing: '0.12em', background: '#CFDA5A' }}
               >
                 {status === 'loading' ? 'SENDING...' : 'SEND FEEDBACK ▶'}
               </button>

@@ -38,8 +38,9 @@ export default function BubbleRect({ bubble, scale }: BubbleRectProps) {
   const hasTranslation = bubble.translation.trim().length > 0
 
   const sharedProps = {
-    fill: hasTranslation ? 'transparent' : 'rgba(99, 102, 241, 0.08)',
-    stroke: isSelected ? '#818cf8' : '#6366f1',
+    // Selected: yellow-green stroke; unselected: muted teal stroke
+    fill: hasTranslation ? 'transparent' : 'rgba(40, 90, 113, 0.10)',
+    stroke: isSelected ? '#CFDA5A' : 'rgba(207, 218, 90, 0.5)',
     strokeWidth: isSelected ? 2 : 1.5,
     draggable: true,
     onClick: handleClick,
@@ -120,6 +121,11 @@ export default function BubbleRect({ bubble, scale }: BubbleRectProps) {
         <Transformer
           ref={trRef}
           rotateEnabled={false}
+          // Style the transformer handles to match the palette
+          anchorFill="#CFDA5A"
+          anchorStroke="#285A71"
+          borderStroke="#CFDA5A"
+          anchorSize={8}
           boundBoxFunc={(oldBox, newBox) => {
             if (newBox.width < 20 || newBox.height < 20) return oldBox
             return newBox

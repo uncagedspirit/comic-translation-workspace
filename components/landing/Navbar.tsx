@@ -15,9 +15,9 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2 group">
           <div
             className="w-8 h-8 flex items-center justify-center border-2 border-white group-hover:rotate-6 transition-transform duration-150"
-            style={{ background: '#C84B31' }}
+            style={{ background: '#285A71' }}
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="#CFDA5A">
               <rect x="1" y="1" width="6" height="6" />
               <rect x="9" y="1" width="6" height="6" />
               <rect x="1" y="9" width="14" height="6" />
@@ -54,7 +54,7 @@ export default function Navbar() {
                     ?.scrollIntoView({ behavior: 'smooth' })
                 }}
                 className="hidden md:block text-sm font-bold hover:opacity-75 transition-opacity"
-                style={{ color: '#C84B31' }}
+                style={{ color: '#CFDA5A' }}
               >
                 My Workspace ↗
               </Link>

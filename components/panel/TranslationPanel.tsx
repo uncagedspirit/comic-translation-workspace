@@ -11,7 +11,7 @@ export default function TranslationPanel() {
   return (
     <div className="flex flex-col h-full">
       {/* Panel header */}
-      <div className="px-4 py-3 border-b border-gray-800 shrink-0">
+      <div className="px-4 py-3 border-b shrink-0" style={{ borderBottomColor: '#285A71' }}>
         <h2 className="text-sm font-semibold text-gray-200">Translations</h2>
         <p className="text-xs text-gray-500 mt-0.5">
           Page {currentPageIndex + 1} — {bubbles.length} bubble{bubbles.length !== 1 ? 's' : ''}
@@ -28,7 +28,8 @@ export default function TranslationPanel() {
             </p>
             <button
               onClick={() => setActiveTool('draw')}
-              className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+              className="text-xs transition-colors hover:opacity-80"
+              style={{ color: '#CFDA5A' }}
             >
               Switch to Draw mode →
             </button>

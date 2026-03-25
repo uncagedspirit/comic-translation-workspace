@@ -23,7 +23,6 @@ export default function ExportButton() {
       const { hasExported } = await getRes.json() as { hasExported: boolean }
 
       if (hasExported === false) {
-        // Try to mark it — only show modal if the write actually succeeded
         const postRes = await fetch('/api/user/export-flag', { method: 'POST' })
         if (postRes.ok) {
           setTimeout(() => setShowFeedback(true), 800)
@@ -61,12 +60,12 @@ export default function ExportButton() {
         <button
           onClick={handleExport}
           disabled={isExporting || !project}
-          className={`
-            px-4 py-1.5 rounded text-sm font-medium transition-colors
-            ${isExporting
+          className={`px-4 py-1.5 rounded text-sm font-medium transition-colors border-2 border-transparent ${
+            isExporting
               ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-              : 'bg-green-600 hover:bg-green-500 text-white'}
-          `}
+              : 'text-[#0a0a0a] hover:border-white hover:bg-transparent hover:text-white'
+          }`}
+          style={!isExporting ? { background: '#CFDA5A' } : {}}
         >
           {isExporting ? 'Exporting...' : '↓ Export ZIP'}
         </button>
